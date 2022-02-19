@@ -4,9 +4,9 @@ namespace Faza1Sorter_v2
 {
     public partial class Form1 : Form
     {
-        //bool Dragging;
-        //int xPos;
-        //int yPos;
+        bool Dragging;
+        int xPos;
+        int yPos;
         public Form1()
         {
             InitializeComponent();
@@ -39,11 +39,11 @@ namespace Faza1Sorter_v2
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            trackBar1.Minimum = 1;
-            trackBar1.Maximum = 6;
-            trackBar1.SmallChange = 1;
-            trackBar1.LargeChange = 1;
-            trackBar1.UseWaitCursor = false;
+            //trackBar1.Minimum = 1;
+            //trackBar1.Maximum = 6;
+            //trackBar1.SmallChange = 1;
+            //trackBar1.LargeChange = 1;
+            //trackBar1.UseWaitCursor = false;
 
             this.DoubleBuffered = true;
             //org = new PictureBox();
@@ -77,25 +77,29 @@ namespace Faza1Sorter_v2
             }
             
         }
-        //private void pictureBox1_MouseUp(object sender, MouseEventArgs e) { Dragging = false; }
-        //private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
-        //{
-        //    if (e.Button == MouseButtons.Left)
-        //    {
-        //        Dragging = true;
-        //        xPos = e.X;
-        //        yPos = e.Y;
-        //    }
-        //}
-        //private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
-        //{
-        //    Control? c = sender as Control;
-        //    if (Dragging && c != null)
-        //    {
-        //        c.Top = e.Y + c.Top - yPos;
-        //        c.Left = e.X + c.Left - xPos;
-        //    }
-        //}
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+           
+        }
+        private void pictureBox1_MouseUp(object sender, MouseEventArgs e) { Dragging = false; }
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                Dragging = true;
+                xPos = e.X;
+                yPos = e.Y;
+            }
+        }
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            Control? c = sender as Control;
+            if (Dragging && c != null)
+            {
+                c.Top = e.Y + c.Top - yPos;
+                c.Left = e.X + c.Left - xPos;
+            }
+        }
 
         public void button2_Click(object sender, EventArgs e)
         {
