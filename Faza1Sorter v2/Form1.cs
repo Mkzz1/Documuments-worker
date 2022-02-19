@@ -4,14 +4,27 @@ namespace Faza1Sorter_v2
 {
     public partial class Form1 : Form
     {
+        //bool Dragging;
+        //int xPos;
+        //int yPos;
         public Form1()
         {
             InitializeComponent();
+            this.pictureBox1.MouseWheel += PictureBox1_MouseWheel;
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private void PictureBox1_MouseWheel(object? sender, MouseEventArgs e)
         {
-
+            if(e.Delta > 0)
+            {
+                pictureBox1.Width = pictureBox1.Width + 100;
+                pictureBox1.Height = pictureBox1.Height + 100;
+            }
+            else
+            {
+                pictureBox1.Width = pictureBox1.Width - 100;
+                pictureBox1.Height = pictureBox1.Height - 100;
+            }
         }
 
         Image ZoomPicture(Image img, Size size)
@@ -43,7 +56,10 @@ namespace Faza1Sorter_v2
             {
                 pictureBox1.Image = null;
                 pictureBox1.Image = ZoomPicture(org.Image, new Size(trackBar1.Value, trackBar1.Value));
+
             }
+
+
         }
 
         public void button1_Click(object sender, EventArgs e)
@@ -54,11 +70,32 @@ namespace Faza1Sorter_v2
             {
                 org = new PictureBox();
                 org.Load(od.FileName);
+                pictureBox1.Cursor = Cursors.Hand;
                 pictureBox1.Load(od.FileName);
+                richTextBox1.Text = Path.GetFileName(od.FileName);
                 
             }
             
         }
+        //private void pictureBox1_MouseUp(object sender, MouseEventArgs e) { Dragging = false; }
+        //private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        //{
+        //    if (e.Button == MouseButtons.Left)
+        //    {
+        //        Dragging = true;
+        //        xPos = e.X;
+        //        yPos = e.Y;
+        //    }
+        //}
+        //private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        //{
+        //    Control? c = sender as Control;
+        //    if (Dragging && c != null)
+        //    {
+        //        c.Top = e.Y + c.Top - yPos;
+        //        c.Left = e.X + c.Left - xPos;
+        //    }
+        //}
 
         public void button2_Click(object sender, EventArgs e)
         {
@@ -71,6 +108,11 @@ namespace Faza1Sorter_v2
         }
 
         private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
 
         }
