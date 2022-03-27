@@ -7,229 +7,258 @@ namespace Faza1Sorter_v2
 {
     public partial class Form1 : MaterialForm
     {
-        private List<Image> LoadedImages { get; set; }
-        private int SelectedImageIndex = 0;
-        bool Dragging;
         int xPos;
         int yPos;
+        bool Dragging;
         public Form1()
         {
             InitializeComponent();
-            this.pictureBox1.MouseWheel += PictureBox1_MouseWheel;
-
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
+            this.pictureBox1.MouseWheel += PictureBox1_MouseWheel;
         }
 
         private void PictureBox1_MouseWheel(object? sender, MouseEventArgs e)
         {
-            if(e.Delta > 0)
+            //this will zoom in and out the picture in picturebox
+            if (e.Delta > 0)
             {
-                pictureBox1.Width = pictureBox1.Width + 100;
-                pictureBox1.Height = pictureBox1.Height + 100;
+                pictureBox1.Width += 40;
+                pictureBox1.Height += 40;
             }
             else
             {
-                pictureBox1.Width = pictureBox1.Width - 100;
-                pictureBox1.Height = pictureBox1.Height - 100;
+                pictureBox1.Width -= 40;
+                pictureBox1.Height -= 40;
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            this.DoubleBuffered = true;
-        }
-        private void LoadImagesFromFolder(string[] paths)
-        {
-            LoadedImages = new List<Image>();
-            
-
-            foreach(var path in paths)
-            { 
-                var tempImage = Image.FromFile(path);
-                LoadedImages.Add(tempImage);
-            }
-        }
-
-        public void button1_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog FolderBrowser = new FolderBrowserDialog();
-            if(FolderBrowser.ShowDialog() == DialogResult.OK)
+            //this button will open folder browser dialog and select the folder. Import all files from that folder and sort them by name. Files will be shown in listview
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            folderBrowserDialog.ShowDialog();
+            string path = folderBrowserDialog.SelectedPath;
+            string[] files = Directory.GetFiles(path);
+            listView1.Items.Clear();
+            foreach (string file in files)
             {
-                var selectedDirectory = FolderBrowser.SelectedPath;
-                var imagePaths = Directory.GetFiles(selectedDirectory);
-
-                LoadImagesFromFolder(imagePaths);
-
-                //Inicializacja listy plików
-                ImageList images = new ImageList();
-                images.ImageSize = new System.Drawing.Size(130, 130);
-                foreach (var image in LoadedImages)
-                {
-                    images.Images.Add(image);
-                }
-                //ustawianie listview z imagelsit
-                listView1.LargeImageList = images;
-
-                for (int itemIndex = 1; itemIndex < LoadedImages.Count; itemIndex++)
-                {
-                    listView1.Items.Add(new ListViewItem($"{itemIndex}", itemIndex - 1));
-                }
+                string[] fileName = file.Split('\\');
+                ListViewItem item = new ListViewItem(fileName[fileName.Length - 1]);
+                item.SubItems.Add(file);
+                listView1.Items.Add(item);
             }
-        }
-        public void pictureBox1_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void pictureBox1_MouseUp(object sender, MouseEventArgs e) { Dragging = false; }
-        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
+            //selected picture in listview will be shown in picturebox
+            listView1.SelectedIndexChanged += (s, args) =>
             {
-                Dragging = true;
-                xPos = e.X;
-                yPos = e.Y;
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    pictureBox1.ImageLocation = listView1.SelectedItems[0].SubItems[1].Text;
+                }
+            };
+            //first ten charachers of file name showedin picturebox will be shown in textbox
+            listView1.SelectedIndexChanged += (s, args) =>
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    string[] fileName = listView1.SelectedItems[0].SubItems[1].Text.Split('\\');
+                    materialTextBox21.Text = fileName[fileName.Length - 1].Substring(0, 10);
+                }
+            };
+            //first item in listview will be selected
+            listView1.Items[0].Selected = true;
+        }
+        
+        private void button6_Click(object sender, EventArgs e)
+        {
+            int index = listView1.SelectedIndices[0] + 1;
+
+            // In case we're in the last row
+            if (index >= listView1.Items.Count)
+                return;
+
+            listView1.Items[index].Selected = true;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            int index = listView1.SelectedIndices[0] - 1;
+
+            // In case we're in the first row
+            if (index < 0)
+                return;
+
+            listView1.Items[index].Selected = true;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //this button will move selected tif file in the listview to the C:\Users\Mkzz\Desktop\doki\Test2 folder with the same name as original file.
+            if (listView1.SelectedItems.Count > 0)
+            {
+                string fileName = listView1.SelectedItems[0].SubItems[1].Text;
+                string[] fileName2 = fileName.Split('\\');
+                string newFileName = fileName2[fileName2.Length - 1];
+                string newPath = @"C:\Users\Mkzz\Desktop\doki\Test2\" + newFileName;
+                File.Move(fileName, newPath);
+                listView1.Items.Remove(listView1.SelectedItems[0]);
+            }
+            //all files wchich contain selected text in textbox will be moved to the C:\Users\Mkzz\Desktop\doki\Test2 folder with the same name as original file.
+            if (materialTextBox21.Text != "")
+            {
+                foreach (ListViewItem item in listView1.Items)
+                {
+                    string fileName = item.SubItems[1].Text;
+                    string[] fileName2 = fileName.Split('\\');
+                    string newFileName = fileName2[fileName2.Length - 1];
+                    string newPath = @"C:\Users\Mkzz\Desktop\doki\Test2\" + newFileName;
+                    if (newFileName.Contains(materialTextBox21.Text))
+                    {
+                        File.Move(fileName, newPath);
+                        listView1.Items.Remove(item);
+                    }
+                }
+            }
+            //next item in listview will be selected
+            if (listView1.Items.Count > 0)
+            {
+                listView1.Items[0].Selected = true;
+                listView1.Items[0].EnsureVisible();
             }
         }
+
+        private void materialSwitch1_CheckedChanged(object sender, EventArgs e)
+        {
+            //this switch will change the color of the form to dark mode.
+            if (materialSwitch1.Checked)
+            {
+                var materialSkinManager = MaterialSkinManager.Instance;
+                materialSkinManager.AddFormToManage(this);
+                materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
+                materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
+            }
+            else
+            {
+                var materialSkinManager = MaterialSkinManager.Instance;
+                materialSkinManager.AddFormToManage(this);
+                materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+                materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            //this button will rotate the picture in picturebox 90 degrees clockwise.
+                pictureBox1.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                pictureBox1.Refresh();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            //this button will rotate the picture in picturebox 90 degrees counter clockwise.
+            pictureBox1.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+            pictureBox1.Refresh();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //this button will move selected tif file in the listview to the C:\Users\Mkzz\Desktop\doki\Test2 folder with the same name as original file.
+            if (listView1.SelectedItems.Count > 0)
+            {
+                string fileName = listView1.SelectedItems[0].SubItems[1].Text;
+                string[] fileName2 = fileName.Split('\\');
+                string newFileName = fileName2[fileName2.Length - 1];
+                string newPath = @"C:\Users\Mkzz\Desktop\doki\Test1\" + newFileName;
+                File.Move(fileName, newPath);
+                listView1.Items.Remove(listView1.SelectedItems[0]);
+            }
+            //all files wchich contain selected text in textbox will be moved to the C:\Users\Mkzz\Desktop\doki\Test2 folder with the same name as original file.
+            if (materialTextBox21.Text != "")
+            {
+                foreach (ListViewItem item in listView1.Items)
+                {
+                    string fileName = item.SubItems[1].Text;
+                    string[] fileName2 = fileName.Split('\\');
+                    string newFileName = fileName2[fileName2.Length - 1];
+                    string newPath = @"C:\Users\Mkzz\Desktop\doki\Test1\" + newFileName;
+                    if (newFileName.Contains(materialTextBox21.Text))
+                    {
+                        File.Move(fileName, newPath);
+                        listView1.Items.Remove(item);
+                    }
+                }
+            }
+            //next item in listview will be selected
+            if (listView1.Items.Count > 0)
+            {
+                listView1.Items[0].Selected = true;
+                listView1.Items[0].EnsureVisible();
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            //this button will move selected tif file in the listview to the C:\Users\Mkzz\Desktop\doki\Test2 folder with the same name as original file.
+            if (listView1.SelectedItems.Count > 0)
+            {
+                string fileName = listView1.SelectedItems[0].SubItems[1].Text;
+                string[] fileName2 = fileName.Split('\\');
+                string newFileName = fileName2[fileName2.Length - 1];
+                string newPath = @"C:\Users\Mkzz\Desktop\doki\Test3\" + newFileName;
+                File.Move(fileName, newPath);
+                listView1.Items.Remove(listView1.SelectedItems[0]);
+            }
+            //all files wchich contain selected text in textbox will be moved to the C:\Users\Mkzz\Desktop\doki\Test2 folder with the same name as original file.
+            if (materialTextBox21.Text != "")
+            {
+                foreach (ListViewItem item in listView1.Items)
+                {
+                    string fileName = item.SubItems[1].Text;
+                    string[] fileName2 = fileName.Split('\\');
+                    string newFileName = fileName2[fileName2.Length - 1];
+                    string newPath = @"C:\Users\Mkzz\Desktop\doki\Test3\" + newFileName;
+                    if (newFileName.Contains(materialTextBox21.Text))
+                    {
+                        File.Move(fileName, newPath);
+                        listView1.Items.Remove(item);
+                    }
+                }
+            }
+            //next item in listview will be selected
+            if (listView1.Items.Count > 0)
+            {
+                listView1.Items[0].Selected = true;
+                listView1.Items[0].EnsureVisible();
+            }
+        }
+
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            Control? c = sender as Control;
+            //this function will let user move picture in picturebox.
+            Control c = sender as Control;
             if (Dragging && c != null)
             {
                 c.Top = e.Y + c.Top - yPos;
                 c.Left = e.X + c.Left - xPos;
             }
         }
-        //przycisk do BK i tranzyt
-        public void button2_Click(object sender, EventArgs e)
+
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            
-            string startFodler = $@"C:\Users\Mkzz\Desktop\doki";
-            string destinyFodler = @"C:\Users\Mkzz\Desktop\doki\Test1\";
-
-            string[] files = Directory.GetFiles(startFodler, "*.tif");
-
-            pictureBox1.Dispose();
-            listView1.Dispose();
-            
-            foreach (string f in files)
+            if (e.Button == MouseButtons.Left)
             {
-                string fName = f.Substring(startFodler.Length +1);
-                File.Copy(Path.Combine(startFodler, fName), Path.Combine(destinyFodler, fName), true);
-
-            }
-            foreach (string f in files)
-            {
-                File.Delete(f);
+                //this function will let user move picture in picturebox.
+                xPos = e.X;
+                yPos = e.Y;
+                Dragging = true;
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
-            string startFodler = $@"C:\Users\Mkzz\Desktop\doki";
-            string destinyFodler = @"C:\Users\Mkzz\Desktop\doki\Test2\";
-
-            string[] files = Directory.GetFiles(startFodler, "*.tif");
-
-            foreach (string f in files)
-            {
-                string fName = f.Substring(startFodler.Length + 1);
-                File.Copy(Path.Combine(startFodler, fName), Path.Combine(destinyFodler, fName), true);
-
-            }
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            string startFodler = $@"C:\Users\Mkzz\Desktop\doki";
-            string destinyFodler = @"C:\Users\Mkzz\Desktop\doki\Test3\";
-
-            string[] files = Directory.GetFiles(startFodler, "*.tif");
-
-            foreach (string f in files)
-            {
-                string fName = f.Substring(startFodler.Length + 1);
-                File.Copy(Path.Combine(startFodler, fName), Path.Combine(destinyFodler, fName), true);
-
-            }
-        }
-
-        private void button_navigation(object sender, EventArgs e)
-        {
-            var clickedButton = sender as Button;
-            if (clickedButton.Text.Contains("Poprzedni"))
-            {
-                if (SelectedImageIndex > 0)
-                {
-                    SelectedImageIndex -= 1;
-                    Image slectedImg = LoadedImages[SelectedImageIndex];
-                    pictureBox1.Image = slectedImg;
-
-                    SelectTheClickedItem(listView1, SelectedImageIndex);
-                }
-            }
-            else
-            {
-                if (SelectedImageIndex < (LoadedImages.Count -1 ))
-                {
-                    SelectedImageIndex += 1;
-                    Image slectedImg = LoadedImages[SelectedImageIndex];
-                    pictureBox1.Image = slectedImg;
-
-                    SelectTheClickedItem(listView1, SelectedImageIndex);
-                }
-            }
-        }
-
-        private void SelectTheClickedItem(ListView list, int index)
-        {
-            for(int item = 0; item < list.Items.Count; item++)
-            {
-                if (item == index)
-                {
-                    list.Items[item].Selected = true;
-                }
-                else
-                {
-                    list.Items[item].Selected = false;
-                }
-            }           
-        }
-
-        private void listView1_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            if (listView1.SelectedIndices.Count > 0)
-            {
-                var selectedIndex = listView1.SelectedIndices[0];
-                Image slectedImg = LoadedImages[selectedIndex];
-                pictureBox1.Image = slectedImg;
-                SelectedImageIndex = selectedIndex;
-            }
-        }
-
-       MaterialSkinManager TManager = MaterialSkinManager.Instance;
-
-        private void materialSwitch1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (materialSwitch1.Checked)
-            {
-                TManager.Theme = MaterialSkinManager.Themes.DARK;
-                
-            }
-            else
-            {
-                TManager.Theme = MaterialSkinManager.Themes.LIGHT;
-            }
-        }
-
-        private void materialTextBox21_Click(object sender, EventArgs e)
-        {
-          //show image file name in textbox
-          string fileName = SelectedImageIndex.ToString();
-          materialTextBox21.Text = fileName;
+            Dragging = false;
         }
     }
 }
