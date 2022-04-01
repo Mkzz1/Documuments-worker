@@ -501,5 +501,13 @@ namespace Faza1Sorter_v2
                 File.Create(@"C:\\SORTER\\settings.txt");
             }
         }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            //this button will open mainMenu.cs
+            mainMenu mainMenu = new mainMenu();
+            mainMenu.Show();
+            this.Hide();
+        }
     }
 }

@@ -50,6 +50,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.button13 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -310,6 +311,7 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.button13);
             this.panel3.Controls.Add(this.button4);
             this.panel3.Controls.Add(this.button3);
             this.panel3.Controls.Add(this.button9);
@@ -323,6 +325,16 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(1022, 227);
             this.panel3.TabIndex = 22;
+            // 
+            // button13
+            // 
+            this.button13.Location = new System.Drawing.Point(3, 191);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(117, 33);
+            this.button13.TabIndex = 17;
+            this.button13.Text = "Wróć do menu";
+            this.button13.UseVisualStyleBackColor = true;
+            this.button13.Click += new System.EventHandler(this.button13_Click);
             // 
             // Form1
             // 
@@ -370,5 +382,6 @@
         private Panel panel4;
         private Panel panel3;
         private Button button12;
+        private Button button13;
     }
 }
