@@ -1,5 +1,6 @@
 ﻿using MaterialSkin;
 using MaterialSkin.Controls;
+using System.Linq;
 
 namespace Faza1Sorter_v2
 {
@@ -13,26 +14,7 @@ namespace Faza1Sorter_v2
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
-            LoadDB();
         }
-
-        //This function will create a database that will record the employee's name and folder location
-        private void createDatabase()
-        {
-            string path = @"C:\Users\Public\Documents\Faza1Sorter.txt";
-            if (!File.Exists(path))
-            {
-                using (StreamWriter sw = File.CreateText(path))
-                {
-                    sw.WriteLine("");
-                }
-            }
-        }
-        private void Sorter_Load(object sender, EventArgs e)
-        {
-            
-        }
-
         public void materialButton1_Click(object sender, EventArgs e)
         {
             //this button will open folderbrowserdialog and select the folder where the files are tif located. Files will be sorted by their names. Files will be shown in the checkedlistbox. Only file name will be shown in the checkedlistbox. File name will be shorten to first 10 characters.
@@ -47,7 +29,7 @@ namespace Faza1Sorter_v2
                 foreach (string file in files)
                 {
                     string fileName = Path.GetFileName(file);
-                    checkedListBox1.Items.Add(fileName.Substring(0, 10));
+                    checkedListBox1.Items.Add(fileName);
                 }
             }
 
@@ -83,26 +65,50 @@ namespace Faza1Sorter_v2
                     checkedListBox1.SetItemChecked(i, false);
                 }
             }
+            //all selected names will be shown in textbox3 separated by comma without spaces
+            textBox3.Text = "";
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                if (checkedListBox1.GetItemChecked(i) == true)
+                {
+                    textBox3.Text += checkedListBox1.Items[i].ToString() + ",";
+                }
+            }
+            //remove last comma
+            textBox3.Text = textBox3.Text.Remove(textBox3.Text.Length - 1);
         }
 
         private void materialButton6_Click(object sender, EventArgs e)
         {
-            //This button will create a folder with the name of the employee in path from textbox4 and show it in the checkedlistbox2
-            string path = textBox4.Text;
-            string folderName = textBox3.Text;
-            string folderPath = path + "\\" + folderName;
-            if (!Directory.Exists(folderPath))
+            //This button will create a folder with the name of the employee in path from textBox4 with name from textBox2.
+            if (textBox4.Text == string.Empty)
             {
-                Directory.CreateDirectory(folderPath);
+                MessageBox.Show("Wskaż foldery pracowników");
             }
-            checkedListBox2.Items.Clear();
-            checkedListBox2.Items.Add(folderName);
+            else
+            {
+                string path = textBox4.Text;
+                string folderName = textBox2.Text;
+                string folderPath = path + "\\" + folderName;
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+                //load all folders from path to checkedlisbox2
+                checkedListBox2.Items.Clear();
+                string[] folders = Directory.GetDirectories(path);
+                foreach (string folder in folders)
+                {
+                    string folderName2 = Path.GetFileName(folder);
+                    checkedListBox2.Items.Add(folderName2);
+                }
+            }
         }
 
         public void materialButton2_Click(object sender, EventArgs e)
         {
             //this button will sort the files in the checkedlistbox1 and show only the files that contain characters from materialMultiLineTextBox21 in their name. Comma will be separator
-            string[] characters = materialMultiLineTextBox21.Text.Split(',');
+            string[] characters = materialMultiLineTextBox21.Text.Split("\r\n");
             checkedListBox1.Items.Clear();
             foreach (string file in files)
             {
@@ -119,30 +125,16 @@ namespace Faza1Sorter_v2
 
         private void materialButton7_Click(object sender, EventArgs e)
         {
-            //this button will remove the selected worker from the database and remove them from the checkedListBox
-            string path = @"settings.txt";
-            string[] lines = File.ReadAllLines(path);
-            string[] newLines = new string[lines.Length - 1];
-            int index = 0;
-            foreach (string line in lines)
+            //this button will remove all selected folders in checkedlistbox2. Remove also from harddrive
+            for (int i = checkedListBox2.Items.Count - 1; i >= 0; i--)
             {
-                if (line != checkedListBox2.SelectedItem.ToString())
+                if (checkedListBox2.GetItemChecked(i))
                 {
-                    newLines[index] = line;
-                    index++;
+                    string folderName = checkedListBox2.Items[i].ToString();
+                    string folderPath = textBox4.Text + "\\" + folderName;
+                    Directory.Delete(folderPath, true);
+                    checkedListBox2.Items.RemoveAt(i);
                 }
-            }
-            File.WriteAllLines(path, newLines);
-            checkedListBox2.Items.Remove(checkedListBox2.SelectedItem);
-        }
-        //create a function that will read database on startup and load workers into the checkedListBox
-        private void LoadDB()
-        {
-            string path = @"settings.txt";
-            string[] lines = File.ReadAllLines(path);
-            foreach (string line in lines)
-            {
-                checkedListBox2.Items.Add(line);
             }
         }
 
@@ -163,19 +155,6 @@ namespace Faza1Sorter_v2
             }
             //folder path will be added to the textbox
             textBox4.Text = folderBrowserDialog1.SelectedPath;
-        }
-
-        private void materialButton9_Click(object sender, EventArgs e)
-        {
-            //this button will remove new lines and change them to commas
-            string search = materialMultiLineTextBox21.Text;
-            string[] searchArray = search.Split('\n');
-            string newSearch = "";
-            foreach (string word in searchArray)
-            {
-                newSearch += word + ",";
-            }
-            materialMultiLineTextBox21.Text = newSearch;
         }
 
         private void materialButton4_Click(object sender, EventArgs e)
@@ -216,7 +195,110 @@ namespace Faza1Sorter_v2
             }
         }
 
-        private void materialButton3_Click(object sender, EventArgs e)
+        private void materialButton10_Click(object sender, EventArgs e)
+        {
+            //this button will open mainMenu.cs
+            mainMenu mainMenu = new mainMenu();
+            mainMenu.Show();
+            this.Hide();
+        }
+
+        private void materialCheckbox2_CheckedChanged_1(object sender, EventArgs e)
+        {
+            //this checkbox will check all values in checkedlistbox2
+            for (int i = 0; i < checkedListBox2.Items.Count; i++)
+            {
+                checkedListBox2.SetItemChecked(i, true);
+            }
+        }
+
+        private void materialButton5_Click(object sender, EventArgs e)
+        {
+            //this button will change name of checked folder in checkedlistbox2 to name from textBox2
+            if(textBox2.Text == string.Empty)
+            {
+                MessageBox.Show("Nie wpisano nazwy");
+            }
+            else if (textBox4.Text == string.Empty)
+            {
+                MessageBox.Show("Nie wybrano ściezki folderów");
+            }
+            else if (checkedListBox2.CheckedItems.Count == 0)
+            {
+                MessageBox.Show("Nie wybrano folderów");
+            }
+            else if (checkedListBox2.CheckedItems.Count > 1)
+            {
+                MessageBox.Show("Wybrano więcej niż jeden folder");
+            }
+            else
+            {
+                string folderPath = textBox4.Text;
+                string folderName = checkedListBox2.SelectedItem.ToString();
+                string folderPath2 = folderPath + "\\" + folderName;
+                string newFolderName = textBox2.Text;
+                string newFolderPath = folderPath + "\\" + newFolderName;
+                Directory.Move(folderPath2, newFolderPath);
+                checkedListBox2.Items.Remove(folderName);
+                checkedListBox2.Items.Add(newFolderName);
+            }
+        }
+
+        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //if item checked in checkbox1 it will print selected name in textBox3
+            //checked items will be separated by a comma
+            if (checkedListBox1.CheckedItems.Count == 0)
+            {
+                textBox3.Text = "";
+            }
+            else if (checkedListBox1.CheckedItems.Count > 1)
+            {
+                textBox3.Text = "";
+                for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
+                {
+                    textBox3.Text += checkedListBox1.CheckedItems[i].ToString() + ",";
+                }
+            }
+            else
+            {
+                textBox3.Text = checkedListBox1.CheckedItems[0].ToString();
+            }
+            //if selected more than one item in checkbox1 remove last comma
+            if (textBox3.Text.Length > 10)
+            {
+                textBox3.Text = textBox3.Text.Remove(textBox3.Text.Length - 1);
+            }
+        }
+
+        private void checkedListBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //if item checked in checkbox1 it will print selected name in textBox3
+            //checked items will be separated by a comma
+            if (checkedListBox2.CheckedItems.Count == 0)
+            {
+                textBox5.Text = "";
+            }
+            else if (checkedListBox2.CheckedItems.Count > 1)
+            {
+                textBox5.Text = "";
+                for (int i = 0; i < checkedListBox2.CheckedItems.Count; i++)
+                {
+                    textBox5.Text += checkedListBox2.CheckedItems[i].ToString() + ",";
+                }
+            }
+            else
+            {
+                textBox5.Text = checkedListBox2.CheckedItems[0].ToString();
+            }
+            //remove comma at the end of textbox5
+            if (textBox5.Text.Length > 1)
+            {
+                textBox5.Text = textBox5.Text.Remove(textBox5.Text.Length - 1);
+            }
+        }
+
+        private void materialButton9_Click(object sender, EventArgs e)
         {
             //This button will split documents checked in checkedlistbox1 that contains selected charachters in their names between folders in checkedlistbox2. Each folder will get an equal number of files. Each folder will get different files.
             if (checkedListBox1.CheckedItems.Count == 0)
@@ -261,35 +343,8 @@ namespace Faza1Sorter_v2
                     {
                         checkedListBox1.Items.RemoveAt(i);
                     }
-                }
-                //count how many files are in each folder and show in listview.
-                //foreach (string folder in checkedListBox2.CheckedItems)
-                //{
-                //    string folderPath3 = workerFolder + "\\" + folder;
-                //    int filesInFolder = Directory.GetFiles(folderPath3).Length;
-                //    ListViewItem item = new ListViewItem(folder);
-                //    item.SubItems.Add(filesInFolder.ToString());
-                //    materialListView1.Items.Add(item);
-                //}
-            }
+                }            }
             MessageBox.Show("Zakończono");
-        }
-
-        private void materialCheckbox2_CheckedChanged(object sender, EventArgs e)
-        {
-            //this will check all values in checkedlistbox
-            for (int i = 0; i < checkedListBox2.Items.Count; i++)
-            {
-                checkedListBox2.SetItemChecked(i, true);
-            }
-        }
-
-        private void materialButton10_Click(object sender, EventArgs e)
-        {
-            //this button will open mainMenu.cs
-            mainMenu mainMenu = new mainMenu();
-            mainMenu.Show();
-            this.Hide();
         }
     }
 }

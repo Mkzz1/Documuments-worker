@@ -9,7 +9,7 @@ namespace Faza1Sorter_v2
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new Sorter());
+            Application.Run(new mainMenu());
         }
     }
 }

@@ -19,7 +19,6 @@ namespace Faza1Sorter_v2
             //this button will open Form1.cs
             Form1 form1 = new Form1();
             form1.Show();
-            this.Hide();
         }
 
         private void materialButton2_Click(object sender, EventArgs e)
@@ -27,7 +26,27 @@ namespace Faza1Sorter_v2
             //this button will open Sorter.cs
             Sorter sorter = new Sorter();
             sorter.Show();
-            this.Hide();
+        }
+
+        private void materialButton4_Click(object sender, EventArgs e)
+        {
+            //this button will open Tasak.cs
+            Tasak tasak = new Tasak();
+            tasak.Show();
+        }
+
+        private void materialButton3_Click(object sender, EventArgs e)
+        {
+            //this button will open asplex.cs
+            asplex asplex = new asplex();
+            asplex.Show();
+        }
+
+        private void materialButton5_Click(object sender, EventArgs e)
+        {
+            //this button will open PDFtoXLSX.cs
+            PDFtoXLSX pdf = new PDFtoXLSX();
+            pdf.Show();
         }
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Sorter));
             this.materialButton1 = new MaterialSkin.Controls.MaterialButton();
             this.materialButton2 = new MaterialSkin.Controls.MaterialButton();
             this.materialButton3 = new MaterialSkin.Controls.MaterialButton();
@@ -43,20 +44,19 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.materialButton8 = new MaterialSkin.Controls.MaterialButton();
             this.textBox4 = new System.Windows.Forms.TextBox();
-            this.materialButton9 = new MaterialSkin.Controls.MaterialButton();
             this.materialCheckbox2 = new MaterialSkin.Controls.MaterialCheckbox();
             this.materialListView1 = new MaterialSkin.Controls.MaterialListView();
-            this.materialButton10 = new MaterialSkin.Controls.MaterialButton();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.materialLabel4 = new MaterialSkin.Controls.MaterialLabel();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.materialButton9 = new MaterialSkin.Controls.MaterialButton();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -89,7 +89,7 @@
             this.materialButton2.Depth = 0;
             this.materialButton2.HighEmphasis = true;
             this.materialButton2.Icon = null;
-            this.materialButton2.Location = new System.Drawing.Point(554, 172);
+            this.materialButton2.Location = new System.Drawing.Point(611, 172);
             this.materialButton2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton2.Name = "materialButton2";
@@ -120,7 +120,6 @@
             this.materialButton3.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.materialButton3.UseAccentColor = false;
             this.materialButton3.UseVisualStyleBackColor = true;
-            this.materialButton3.Click += new System.EventHandler(this.materialButton3_Click);
             // 
             // materialButton4
             // 
@@ -149,7 +148,7 @@
             this.materialButton5.Depth = 0;
             this.materialButton5.HighEmphasis = true;
             this.materialButton5.Icon = null;
-            this.materialButton5.Location = new System.Drawing.Point(492, 295);
+            this.materialButton5.Location = new System.Drawing.Point(491, 181);
             this.materialButton5.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton5.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton5.Name = "materialButton5";
@@ -160,6 +159,7 @@
             this.materialButton5.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.materialButton5.UseAccentColor = false;
             this.materialButton5.UseVisualStyleBackColor = true;
+            this.materialButton5.Click += new System.EventHandler(this.materialButton5_Click);
             // 
             // materialButton6
             // 
@@ -168,7 +168,7 @@
             this.materialButton6.Depth = 0;
             this.materialButton6.HighEmphasis = true;
             this.materialButton6.Icon = null;
-            this.materialButton6.Location = new System.Drawing.Point(494, 108);
+            this.materialButton6.Location = new System.Drawing.Point(494, 139);
             this.materialButton6.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton6.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton6.Name = "materialButton6";
@@ -185,7 +185,7 @@
             // 
             this.materialCheckbox1.AutoSize = true;
             this.materialCheckbox1.Depth = 0;
-            this.materialCheckbox1.Location = new System.Drawing.Point(4, 60);
+            this.materialCheckbox1.Location = new System.Drawing.Point(-3, 60);
             this.materialCheckbox1.Margin = new System.Windows.Forms.Padding(0);
             this.materialCheckbox1.MouseLocation = new System.Drawing.Point(-1, -1);
             this.materialCheckbox1.MouseState = MaterialSkin.MouseState.HOVER;
@@ -200,11 +200,13 @@
             // 
             // checkedListBox1
             // 
+            this.checkedListBox1.CheckOnClick = true;
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Location = new System.Drawing.Point(3, 108);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(525, 454);
             this.checkedListBox1.TabIndex = 9;
+            this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
             // 
             // checkedListBox2
             // 
@@ -215,6 +217,7 @@
             this.checkedListBox2.Name = "checkedListBox2";
             this.checkedListBox2.Size = new System.Drawing.Size(258, 454);
             this.checkedListBox2.TabIndex = 10;
+            this.checkedListBox2.SelectedIndexChanged += new System.EventHandler(this.checkedListBox2_SelectedIndexChanged);
             // 
             // materialButton7
             // 
@@ -269,7 +272,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(495, 170);
+            this.textBox2.Location = new System.Drawing.Point(495, 108);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(166, 23);
             this.textBox2.TabIndex = 14;
@@ -298,13 +301,6 @@
             this.materialLabel2.TabIndex = 17;
             this.materialLabel2.Text = "Folder";
             // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(495, 221);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(166, 23);
-            this.textBox3.TabIndex = 16;
-            // 
             // materialLabel3
             // 
             this.materialLabel3.AutoSize = true;
@@ -317,13 +313,6 @@
             this.materialLabel3.TabIndex = 18;
             this.materialLabel3.Text = "Limit spraw";
             // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(585, 256);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(48, 23);
-            this.numericUpDown1.TabIndex = 19;
-            // 
             // materialButton8
             // 
             this.materialButton8.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -331,7 +320,7 @@
             this.materialButton8.Depth = 0;
             this.materialButton8.HighEmphasis = true;
             this.materialButton8.Icon = null;
-            this.materialButton8.Location = new System.Drawing.Point(831, 70);
+            this.materialButton8.Location = new System.Drawing.Point(811, 70);
             this.materialButton8.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.materialButton8.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton8.Name = "materialButton8";
@@ -352,31 +341,11 @@
             this.textBox4.Size = new System.Drawing.Size(338, 23);
             this.textBox4.TabIndex = 21;
             // 
-            // materialButton9
-            // 
-            this.materialButton9.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialButton9.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.materialButton9.Depth = 0;
-            this.materialButton9.HighEmphasis = true;
-            this.materialButton9.Icon = null;
-            this.materialButton9.Location = new System.Drawing.Point(686, 172);
-            this.materialButton9.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialButton9.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialButton9.Name = "materialButton9";
-            this.materialButton9.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton9.Size = new System.Drawing.Size(109, 36);
-            this.materialButton9.TabIndex = 22;
-            this.materialButton9.Text = "Konwertuj";
-            this.materialButton9.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.materialButton9.UseAccentColor = false;
-            this.materialButton9.UseVisualStyleBackColor = true;
-            this.materialButton9.Click += new System.EventHandler(this.materialButton9_Click);
-            // 
             // materialCheckbox2
             // 
             this.materialCheckbox2.AutoSize = true;
             this.materialCheckbox2.Depth = 0;
-            this.materialCheckbox2.Location = new System.Drawing.Point(811, 122);
+            this.materialCheckbox2.Location = new System.Drawing.Point(804, 124);
             this.materialCheckbox2.Margin = new System.Windows.Forms.Padding(0);
             this.materialCheckbox2.MouseLocation = new System.Drawing.Point(-1, -1);
             this.materialCheckbox2.MouseState = MaterialSkin.MouseState.HOVER;
@@ -387,7 +356,7 @@
             this.materialCheckbox2.TabIndex = 23;
             this.materialCheckbox2.Text = "Zaznacz wszystkie";
             this.materialCheckbox2.UseVisualStyleBackColor = true;
-            this.materialCheckbox2.CheckedChanged += new System.EventHandler(this.materialCheckbox2_CheckedChanged);
+            this.materialCheckbox2.CheckedChanged += new System.EventHandler(this.materialCheckbox2_CheckedChanged_1);
             // 
             // materialListView1
             // 
@@ -407,39 +376,26 @@
             this.materialListView1.UseCompatibleStateImageBehavior = false;
             this.materialListView1.View = System.Windows.Forms.View.Details;
             // 
-            // materialButton10
-            // 
-            this.materialButton10.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialButton10.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.materialButton10.Depth = 0;
-            this.materialButton10.HighEmphasis = true;
-            this.materialButton10.Icon = null;
-            this.materialButton10.Location = new System.Drawing.Point(7, 578);
-            this.materialButton10.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialButton10.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialButton10.Name = "materialButton10";
-            this.materialButton10.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton10.Size = new System.Drawing.Size(132, 36);
-            this.materialButton10.TabIndex = 25;
-            this.materialButton10.Text = "Wróć do menu";
-            this.materialButton10.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.materialButton10.UseAccentColor = false;
-            this.materialButton10.UseVisualStyleBackColor = true;
-            this.materialButton10.Click += new System.EventHandler(this.materialButton10_Click);
-            // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.textBox3);
             this.panel1.Controls.Add(this.panel4);
             this.panel1.Controls.Add(this.materialButton1);
-            this.panel1.Controls.Add(this.materialButton10);
             this.panel1.Controls.Add(this.materialCheckbox1);
             this.panel1.Controls.Add(this.checkedListBox1);
             this.panel1.Controls.Add(this.textBox1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(3, 64);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(545, 629);
+            this.panel1.Size = new System.Drawing.Size(545, 642);
             this.panel1.TabIndex = 26;
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(3, 568);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(525, 23);
+            this.textBox3.TabIndex = 29;
             // 
             // panel4
             // 
@@ -454,46 +410,85 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel2.Location = new System.Drawing.Point(1292, 64);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(200, 629);
+            this.panel2.Size = new System.Drawing.Size(200, 642);
             this.panel2.TabIndex = 27;
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.materialLabel4);
             this.panel3.Controls.Add(this.materialButton7);
             this.panel3.Controls.Add(this.materialButton5);
             this.panel3.Controls.Add(this.materialButton6);
             this.panel3.Controls.Add(this.textBox2);
             this.panel3.Controls.Add(this.materialLabel1);
             this.panel3.Controls.Add(this.textBox4);
-            this.panel3.Controls.Add(this.textBox3);
             this.panel3.Controls.Add(this.materialLabel2);
-            this.panel3.Controls.Add(this.numericUpDown1);
             this.panel3.Controls.Add(this.materialLabel3);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel3.Location = new System.Drawing.Point(-481, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(681, 629);
+            this.panel3.Size = new System.Drawing.Size(681, 642);
             this.panel3.TabIndex = 0;
+            // 
+            // materialLabel4
+            // 
+            this.materialLabel4.AutoSize = true;
+            this.materialLabel4.Depth = 0;
+            this.materialLabel4.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialLabel4.Location = new System.Drawing.Point(495, 86);
+            this.materialLabel4.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel4.Name = "materialLabel4";
+            this.materialLabel4.Size = new System.Drawing.Size(35, 19);
+            this.materialLabel4.TabIndex = 22;
+            this.materialLabel4.Text = "Imie:";
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(811, 632);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(475, 23);
+            this.textBox5.TabIndex = 29;
+            // 
+            // materialButton9
+            // 
+            this.materialButton9.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton9.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton9.Depth = 0;
+            this.materialButton9.HighEmphasis = true;
+            this.materialButton9.Icon = null;
+            this.materialButton9.Location = new System.Drawing.Point(629, 383);
+            this.materialButton9.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton9.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton9.Name = "materialButton9";
+            this.materialButton9.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton9.Size = new System.Drawing.Size(76, 36);
+            this.materialButton9.TabIndex = 30;
+            this.materialButton9.Text = "Sortuj";
+            this.materialButton9.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton9.UseAccentColor = false;
+            this.materialButton9.UseVisualStyleBackColor = true;
+            this.materialButton9.Click += new System.EventHandler(this.materialButton9_Click);
             // 
             // Sorter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1495, 696);
+            this.ClientSize = new System.Drawing.Size(1495, 709);
+            this.Controls.Add(this.materialButton9);
+            this.Controls.Add(this.textBox5);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.materialListView1);
             this.Controls.Add(this.materialCheckbox2);
-            this.Controls.Add(this.materialButton9);
             this.Controls.Add(this.materialButton8);
             this.Controls.Add(this.materialMultiLineTextBox21);
             this.Controls.Add(this.checkedListBox2);
             this.Controls.Add(this.materialButton4);
             this.Controls.Add(this.materialButton3);
             this.Controls.Add(this.materialButton2);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Sorter";
             this.Text = "Sorter";
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -520,18 +515,18 @@
         private TextBox textBox2;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private MaterialSkin.Controls.MaterialLabel materialLabel2;
-        private TextBox textBox3;
         private MaterialSkin.Controls.MaterialLabel materialLabel3;
-        private NumericUpDown numericUpDown1;
         private MaterialSkin.Controls.MaterialButton materialButton8;
         private TextBox textBox4;
-        private MaterialSkin.Controls.MaterialButton materialButton9;
         private MaterialSkin.Controls.MaterialCheckbox materialCheckbox2;
         private MaterialSkin.Controls.MaterialListView materialListView1;
-        private MaterialSkin.Controls.MaterialButton materialButton10;
         private Panel panel1;
         private Panel panel4;
         private Panel panel2;
         private Panel panel3;
+        private MaterialSkin.Controls.MaterialLabel materialLabel4;
+        private TextBox textBox3;
+        private TextBox textBox5;
+        private MaterialSkin.Controls.MaterialButton materialButton9;
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -48,9 +49,11 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button12 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.filesPath = new System.Windows.Forms.TextBox();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.button13 = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -296,9 +299,17 @@
             this.panel2.Size = new System.Drawing.Size(1294, 41);
             this.panel2.TabIndex = 19;
             // 
+            // filesPath
+            // 
+            this.filesPath.Location = new System.Drawing.Point(6, 338);
+            this.filesPath.Name = "filesPath";
+            this.filesPath.Size = new System.Drawing.Size(156, 23);
+            this.filesPath.TabIndex = 12;
+            // 
             // panel4
             // 
             this.panel4.Controls.Add(this.listView1);
+            this.panel4.Controls.Add(this.filesPath);
             this.panel4.Controls.Add(this.materialTextBox21);
             this.panel4.Controls.Add(this.button7);
             this.panel4.Controls.Add(this.button8);
@@ -336,6 +347,12 @@
             this.button13.UseVisualStyleBackColor = true;
             this.button13.Click += new System.EventHandler(this.button13_Click);
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 900000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -355,6 +372,7 @@
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -383,5 +401,7 @@
         private Panel panel3;
         private Button button12;
         private Button button13;
+        private TextBox filesPath;
+        private System.Windows.Forms.Timer timer1;
     }
 }

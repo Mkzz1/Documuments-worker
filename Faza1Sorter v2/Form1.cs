@@ -1,5 +1,6 @@
 using MaterialSkin;
 using MaterialSkin.Controls;
+using System.Timers;
 
 namespace Faza1Sorter_v2
 {
@@ -82,7 +83,11 @@ namespace Faza1Sorter_v2
                     //first item in listview will be selected
                     listView1.Items[0].Selected = true;
                 }
+            //load selected path to filesPath textbox
+            filesPath.Text = path;
+            //start timer 30 seconds
             
+
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -500,6 +505,11 @@ namespace Faza1Sorter_v2
             {
                 File.Create(@"C:\\SORTER\\settings.txt");
             }
+            //if settings.txt is empty, program will fill display message box with text "Pamiêtaj by ustawiæ œcie¿ki folderów w ustawieniach!"
+            if (File.ReadAllText(@"C:\\SORTER\\settings.txt") == "")
+            {
+                MessageBox.Show("Pamiêtaj by ustawiæ œcie¿ki folderów w ustawieniach!");
+            }
         }
 
         private void button13_Click(object sender, EventArgs e)
@@ -508,6 +518,22 @@ namespace Faza1Sorter_v2
             mainMenu mainMenu = new mainMenu();
             mainMenu.Show();
             this.Hide();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            //this method will load new .TIF files every 30 seconds into listView1 from path in textbox
+            listView1.Items.Clear();
+            string path = filesPath.Text;
+            string[] files = Directory.GetFiles(path, "*.TIF");
+            foreach (string file in files)
+            {
+                string[] fileName = file.Split('\\');
+                string fileName2 = fileName[fileName.Length - 1];
+                ListViewItem item = new ListViewItem(fileName2);
+                item.SubItems.Add(file);
+                listView1.Items.Add(item);
+            }
         }
     }
 }
