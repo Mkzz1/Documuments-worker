@@ -91,7 +91,7 @@
             this.Controls.Add(this.materialButton2);
             this.Controls.Add(this.materialButton1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimizeBox = false;
+            this.MaximizeBox = false;
             this.Name = "asplex";
             this.Sizable = false;
             this.Text = "Asplex";

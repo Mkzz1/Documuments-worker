@@ -512,14 +512,6 @@ namespace Faza1Sorter_v2
             }
         }
 
-        private void button13_Click(object sender, EventArgs e)
-        {
-            //this button will open mainMenu.cs
-            mainMenu mainMenu = new mainMenu();
-            mainMenu.Show();
-            this.Hide();
-        }
-
         private void timer1_Tick(object sender, EventArgs e)
         {
             //this method will load new .TIF files every 30 seconds into listView1 from path in textbox
