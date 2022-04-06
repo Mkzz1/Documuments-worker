@@ -1,5 +1,7 @@
 ﻿using MaterialSkin;
 using MaterialSkin.Controls;
+using PdfSharp.Pdf;
+using PdfSharp.Drawing;
 
 namespace Faza1Sorter_v2
 {
@@ -47,6 +49,35 @@ namespace Faza1Sorter_v2
             //this button will open PDFtoXLSX.cs
             PDFtoXLSX pdf = new PDFtoXLSX();
             pdf.Show();
+        }
+        void DrawImage(XGraphics gfx, string jpegSamplePath, int x, int y, int width, int height)
+        {
+            XImage image = XImage.FromFile(jpegSamplePath);
+            gfx.DrawImage(image, x, y, width, height);
+        }
+        
+        private void materialButton6_Click(object sender, EventArgs e)
+        {
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            //this button will convert all images from listview to PDF and save them in the same folder as the original images using PdfSharp
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "JPEG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|BMP files (*.bmp)|*.bmp|All files (*.*)|*.*";
+            fileDialog.Multiselect = true;
+
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                PdfDocument document = new PdfDocument();
+                document.Info.Title = "Skonwertowany plik";
+
+                foreach (string fileSpec in fileDialog.FileNames)
+                {
+                    PdfPage page = document.AddPage();
+                    XGraphics gfx = XGraphics.FromPdfPage(page);
+                    DrawImage(gfx, fileSpec, 0, 0, (int)page.Width, (int)page.Height);
+                }
+                string downloadsPath = Environment.ExpandEnvironmentVariables("%userprofile%/downloads/");
+                if (document.PageCount > 0) document.Save(downloadsPath + "SkonwertowanyPlik.pdf");
+            }
         }
     }
 }

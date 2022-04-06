@@ -133,7 +133,11 @@ namespace Faza1Sorter_v2
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (listView1.Items.Count == 0)
+            if(File.ReadAllText(@"C:\\SORTER\\settings.txt") == "")
+            {
+                MessageBox.Show("Wska¿ foldery w ustawieniach!");
+            }
+            else if (listView1.Items.Count == 0)
             {
                 pictureBox1.Image = null;
                 materialTextBox21.Text = "";
@@ -231,7 +235,11 @@ namespace Faza1Sorter_v2
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (listView1.Items.Count == 0)
+            if (File.ReadAllText(@"C:\\SORTER\\settings.txt") == "")
+            {
+                MessageBox.Show("Wska¿ foldery w ustawieniach!");
+            }
+            else if (listView1.Items.Count == 0)
             {
                 pictureBox1.Image = null;
                 materialTextBox21.Text = "";
@@ -277,7 +285,11 @@ namespace Faza1Sorter_v2
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (listView1.Items.Count == 0)
+            if (File.ReadAllText(@"C:\\SORTER\\settings.txt") == "")
+            {
+                MessageBox.Show("Wska¿ foldery w ustawieniach!");
+            }
+            else if (listView1.Items.Count == 0)
             {
                 pictureBox1.Image = null;
                 materialTextBox21.Text = "";
@@ -349,7 +361,11 @@ namespace Faza1Sorter_v2
 
         private void button11_Click(object sender, EventArgs e)
         {
-            if (listView1.Items.Count == 0)
+            if (File.ReadAllText(@"C:\\SORTER\\settings.txt") == "")
+            {
+                MessageBox.Show("Wska¿ foldery w ustawieniach!");
+            }
+            else if (listView1.Items.Count == 0)
             {
                 pictureBox1.Image = null;
                 materialTextBox21.Text = "";
@@ -395,7 +411,11 @@ namespace Faza1Sorter_v2
 
         private void button10_Click(object sender, EventArgs e)
         {
-            if (listView1.Items.Count == 0)
+            if (File.ReadAllText(@"C:\\SORTER\\settings.txt") == "")
+            {
+                MessageBox.Show("Wska¿ foldery w ustawieniach!");
+            }
+            else if (listView1.Items.Count == 0)
             {
                 pictureBox1.Image = null;
                 materialTextBox21.Text = "";
@@ -442,7 +462,11 @@ namespace Faza1Sorter_v2
         
         private void button9_Click(object sender, EventArgs e)
         {
-            if (listView1.Items.Count == 0)
+            if (File.ReadAllText(@"C:\\SORTER\\settings.txt") == "")
+            {
+                MessageBox.Show("Wska¿ foldery w ustawieniach!");
+            }
+            else if (listView1.Items.Count == 0)
             {
                 pictureBox1.Image = null;
                 materialTextBox21.Text = "";
