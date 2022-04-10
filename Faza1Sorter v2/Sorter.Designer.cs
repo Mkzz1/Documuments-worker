@@ -48,6 +48,7 @@
             this.materialButton3 = new MaterialSkin.Controls.MaterialButton();
             this.materialButton9 = new MaterialSkin.Controls.MaterialButton();
             this.checkedListBox2 = new System.Windows.Forms.CheckedListBox();
+            this.materialButton7 = new MaterialSkin.Controls.MaterialButton();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -340,11 +341,32 @@
             this.checkedListBox2.Size = new System.Drawing.Size(456, 454);
             this.checkedListBox2.TabIndex = 32;
             // 
+            // materialButton7
+            // 
+            this.materialButton7.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton7.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton7.Depth = 0;
+            this.materialButton7.HighEmphasis = true;
+            this.materialButton7.Icon = null;
+            this.materialButton7.Location = new System.Drawing.Point(1115, 70);
+            this.materialButton7.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton7.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton7.Name = "materialButton7";
+            this.materialButton7.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton7.Size = new System.Drawing.Size(191, 36);
+            this.materialButton7.TabIndex = 33;
+            this.materialButton7.Text = "Wczytaj bazę danych";
+            this.materialButton7.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton7.UseAccentColor = false;
+            this.materialButton7.UseVisualStyleBackColor = true;
+            this.materialButton7.Click += new System.EventHandler(this.materialButton7_Click_1);
+            // 
             // Sorter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1495, 709);
+            this.Controls.Add(this.materialButton7);
             this.Controls.Add(this.checkedListBox2);
             this.Controls.Add(this.materialButton9);
             this.Controls.Add(this.panel2);
@@ -386,5 +408,6 @@
         private MaterialSkin.Controls.MaterialButton materialButton9;
         private CheckedListBox checkedListBox2;
         private MaterialSkin.Controls.MaterialButton materialButton3;
+        private MaterialSkin.Controls.MaterialButton materialButton7;
     }
 }

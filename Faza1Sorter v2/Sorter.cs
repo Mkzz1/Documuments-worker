@@ -232,7 +232,6 @@ namespace Faza1Sorter_v2
 
         private void Sorter_Load(object sender, EventArgs e)
         {
-            ImportWorkersToList();
             CheckSettings();
         }
 
@@ -257,6 +256,11 @@ namespace Faza1Sorter_v2
                 string[] lines = { "1", "2", "3", "4", "5", "6", "1 database" };
                 File.WriteAllLines(path, lines);
             }
+        }
+
+        private void materialButton7_Click_1(object sender, EventArgs e)
+        {
+            ImportWorkersToList();
         }
     }
 }
