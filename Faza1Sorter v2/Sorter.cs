@@ -1,5 +1,7 @@
 ﻿using MaterialSkin;
 using MaterialSkin.Controls;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace Faza1Sorter_v2
@@ -65,59 +67,40 @@ namespace Faza1Sorter_v2
                     checkedListBox1.SetItemChecked(i, false);
                 }
             }
-            //all selected names will be shown in textbox3 separated by comma without spaces
-            textBox3.Text = "";
-            for (int i = 0; i < checkedListBox1.Items.Count; i++)
-            {
-                if (checkedListBox1.GetItemChecked(i) == true)
-                {
-                    textBox3.Text += checkedListBox1.Items[i].ToString() + ",";
-                }
-            }
-            //remove last comma
-            textBox3.Text = textBox3.Text.Remove(textBox3.Text.Length - 1);
         }
 
         private void materialButton6_Click(object sender, EventArgs e)
         {
-            //This button will create a folder with the name of the employee in path from textBox4 with name from textBox2.
-            if (textBox4.Text == string.Empty)
-            {
-                MessageBox.Show("Wskaż foldery pracowników");
-            }
-            else
-            {
-                string path = textBox4.Text;
-                string folderName = textBox2.Text;
-                string folderPath = path + "\\" + folderName;
-                if (!Directory.Exists(folderPath))
-                {
-                    Directory.CreateDirectory(folderPath);
-                }
-                //load all folders from path to checkedlisbox2
-                checkedListBox2.Items.Clear();
-                string[] folders = Directory.GetDirectories(path);
-                foreach (string folder in folders)
-                {
-                    string folderName2 = Path.GetFileName(folder);
-                    checkedListBox2.Items.Add(folderName2);
-                }
-            }
+            //open userAdd.cs
+            userAdd userAdd = new userAdd();
+            userAdd.Show();
         }
 
         public void materialButton2_Click(object sender, EventArgs e)
         {
-            //this button will sort the files in the checkedlistbox1 and show only the files that contain characters from materialMultiLineTextBox21 in their name. Comma will be separator
-            string[] characters = materialMultiLineTextBox21.Text.Split("\r\n");
-            checkedListBox1.Items.Clear();
-            foreach (string file in files)
+            //this button will sort checkedlistbox1 and show only files whose names start with 10 characters specified in textbox.
+
+            if (materialMultiLineTextBox21.ToString() == "")
             {
-                string fileName = Path.GetFileName(file);
-                foreach (string character in characters)
+                MessageBox.Show("Wprowadź nazwę pliku");
+            }
+            else if (checkedListBox1.Items.Count == 0)
+            {
+                MessageBox.Show("Wybierz pliki");
+            }
+            else
+            {
+                string[] characters = materialMultiLineTextBox21.Text.Split("\r\n");
+                checkedListBox1.Items.Clear();
+                foreach (string file in files)
                 {
-                    if (fileName.Contains(character))
+                    string fileName = Path.GetFileName(file);
+                    foreach (string character in characters)
                     {
-                        checkedListBox1.Items.Add(fileName);
+                        if (fileName.StartsWith(character))
+                        {
+                            checkedListBox1.Items.Add(fileName);
+                        }
                     }
                 }
             }
@@ -125,73 +108,76 @@ namespace Faza1Sorter_v2
 
         private void materialButton7_Click(object sender, EventArgs e)
         {
-            //this button will remove all selected folders in checkedlistbox2. Remove also from harddrive
-            for (int i = checkedListBox2.Items.Count - 1; i >= 0; i--)
-            {
-                if (checkedListBox2.GetItemChecked(i))
-                {
-                    string folderName = checkedListBox2.Items[i].ToString();
-                    string folderPath = textBox4.Text + "\\" + folderName;
-                    Directory.Delete(folderPath, true);
-                    checkedListBox2.Items.RemoveAt(i);
-                }
-            }
-        }
-
-        private void materialButton8_Click(object sender, EventArgs e)
-        {
-            //this button will open folderbroweserdialog. Load all folders from the selected folder and add them to the chechlist
-            FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
-            folderBrowserDialog1.ShowNewFolderButton = false;
-            folderBrowserDialog1.Description = "Wybierz folder z pracownikami";
-            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
-            {
-                string folderPath = folderBrowserDialog1.SelectedPath;
-                string[] folders = Directory.GetDirectories(folderPath);
-                foreach (string folder in folders)
-                {
-                    checkedListBox2.Items.Add(Path.GetFileName(folder));
-                }
-            }
-            //folder path will be added to the textbox
-            textBox4.Text = folderBrowserDialog1.SelectedPath;
+            
         }
 
         private void materialButton4_Click(object sender, EventArgs e)
         {
-            //this button will move checked files to the selected folder. If no folder is selected, a messagebox will pop up. If more than one folder selected a messagebox will pop up.
-            if (checkedListBox1.CheckedItems.Count == 0)
+            //this button will move checked in checkedlistbox1 files to FolderLocation from database
+            //checkedlistbox2 show Name from database, find FolderLocation assigned to Name
+            //move files to FolderLocation
+            //remove files from checkedlistbox1
+            if (checkedListBox2.CheckedItems.Count > 1)
             {
-                MessageBox.Show("Nie wybrano plików");
-            }
-            else if (checkedListBox2.CheckedItems.Count > 1)
-            {
-                MessageBox.Show("Wybrano więcej niż jeden folder");
-            }
-            else if(checkedListBox2.CheckedItems.Count == 0)
-            {
-                MessageBox.Show("Nie wybrano folderu");
+                MessageBox.Show("Wybierz tylko jedną pozycję");
             }
             else
             {
-                string folderPath = textBox1.Text;
-                string workerFolder = textBox4.Text;
-                string folderName = checkedListBox2.SelectedItem.ToString();
-                string folderPath2 = workerFolder + "\\" + folderName;
-                foreach (string file in checkedListBox1.CheckedItems)
+                //get checked files from checkedlistbox1 in textbox1 folder
+                string location = textBox1.Text;
+                string[] files = new string[checkedListBox1.CheckedItems.Count];
+                for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
                 {
-                    string filePath = folderPath + "\\" + file;
-                    string filePath2 = folderPath2 + "\\" + file;
-                    File.Move(filePath, filePath2);
+                    files[i] = checkedListBox1.CheckedItems[i].ToString();
                 }
-                //moved files will be removed from the checkedlistbox
-                for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                //get FolderLocation from database
+                SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Mkzz\source\repos\Faza1Sorter v4\Faza1Sorter v2\database.mdf;Integrated Security=True");
+                con.Open();
+                //get checked Name as string from database
+                string checkedName = "";
+                for (int i = 0; i < checkedListBox2.CheckedItems.Count; i++)
                 {
-                    if (checkedListBox1.GetItemChecked(i))
+                    checkedName += checkedListBox2.CheckedItems[i].ToString();
+                }
+                //get FolderLocation from database
+                string query = "SELECT FolderLocation FROM Workers WHERE Name = '" + checkedName + "'";
+                SqlCommand cmd = new SqlCommand(query, con);
+                SqlDataReader reader = cmd.ExecuteReader();
+                string folderLocation = "";
+                while (reader.Read())
+                {
+                    folderLocation = reader["FolderLocation"].ToString();
+                }
+                reader.Close();
+                //move files to FolderLocation
+                for (int i = 0; i < files.Length; i++)
+                {
+                    string fileName = Path.GetFileName(files[i]);
+                    string newFileName = Path.Combine(folderLocation, fileName);
+                    File.Move(location + "\\" + files[i], newFileName);
+                }
+                //Remove moved files from checkedlistbox1
+                for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
+                {
+                    checkedListBox1.Items.Remove(checkedListBox1.CheckedItems[i]);
+                }
+                //count how many files in folder has the same first ten charachters in their name. save number of files as int
+                int count = 0;
+                foreach (string file in Directory.GetFiles(folderLocation))
+                {
+                    string fileName = Path.GetFileName(file);
+                    if (fileName.Substring(0, 10) == fileName.Substring(0, 10))
                     {
-                        checkedListBox1.Items.RemoveAt(i);
+                        count++;
                     }
                 }
+                //Add count to database in NumOfWork
+                query = "UPDATE Workers SET NumOfWork = NumOfWork + " + count + " WHERE Name = '" + checkedName + "'";
+                cmd = new SqlCommand(query, con);
+                cmd.ExecuteNonQuery();
+                con.Close();
+
+                MessageBox.Show("Pliki zostały przeniesione");
             }
         }
 
@@ -203,148 +189,40 @@ namespace Faza1Sorter_v2
             this.Hide();
         }
 
-        private void materialCheckbox2_CheckedChanged_1(object sender, EventArgs e)
-        {
-            //this checkbox will check all values in checkedlistbox2
-            for (int i = 0; i < checkedListBox2.Items.Count; i++)
-            {
-                checkedListBox2.SetItemChecked(i, true);
-            }
-        }
-
         private void materialButton5_Click(object sender, EventArgs e)
         {
-            //this button will change name of checked folder in checkedlistbox2 to name from textBox2
-            if(textBox2.Text == string.Empty)
-            {
-                MessageBox.Show("Nie wpisano nazwy");
-            }
-            else if (textBox4.Text == string.Empty)
-            {
-                MessageBox.Show("Nie wybrano ściezki folderów");
-            }
-            else if (checkedListBox2.CheckedItems.Count == 0)
-            {
-                MessageBox.Show("Nie wybrano folderów");
-            }
-            else if (checkedListBox2.CheckedItems.Count > 1)
-            {
-                MessageBox.Show("Wybrano więcej niż jeden folder");
-            }
-            else
-            {
-                string folderPath = textBox4.Text;
-                string folderName = checkedListBox2.SelectedItem.ToString();
-                string folderPath2 = folderPath + "\\" + folderName;
-                string newFolderName = textBox2.Text;
-                string newFolderPath = folderPath + "\\" + newFolderName;
-                Directory.Move(folderPath2, newFolderPath);
-                checkedListBox2.Items.Remove(folderName);
-                checkedListBox2.Items.Add(newFolderName);
-            }
+            //open editUser.cs
+            editUser editUser = new editUser();
+            editUser.Show();
         }
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //if item checked in checkbox1 it will print selected name in textBox3
-            //checked items will be separated by a comma
-            if (checkedListBox1.CheckedItems.Count == 0)
-            {
-                textBox3.Text = "";
-            }
-            else if (checkedListBox1.CheckedItems.Count > 1)
-            {
-                textBox3.Text = "";
-                for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
-                {
-                    textBox3.Text += checkedListBox1.CheckedItems[i].ToString() + ",";
-                }
-            }
-            else
-            {
-                textBox3.Text = checkedListBox1.CheckedItems[0].ToString();
-            }
-            //if selected more than one item in checkbox1 remove last comma
-            if (textBox3.Text.Length > 10)
-            {
-                textBox3.Text = textBox3.Text.Remove(textBox3.Text.Length - 1);
-            }
-        }
-
-        private void checkedListBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //if item checked in checkbox1 it will print selected name in textBox3
-            //checked items will be separated by a comma
-            if (checkedListBox2.CheckedItems.Count == 0)
-            {
-                textBox5.Text = "";
-            }
-            else if (checkedListBox2.CheckedItems.Count > 1)
-            {
-                textBox5.Text = "";
-                for (int i = 0; i < checkedListBox2.CheckedItems.Count; i++)
-                {
-                    textBox5.Text += checkedListBox2.CheckedItems[i].ToString() + ",";
-                }
-            }
-            else
-            {
-                textBox5.Text = checkedListBox2.CheckedItems[0].ToString();
-            }
-            //remove comma at the end of textbox5
-            if (textBox5.Text.Length > 1)
-            {
-                textBox5.Text = textBox5.Text.Remove(textBox5.Text.Length - 1);
-            }
+            
         }
 
         private void materialButton9_Click(object sender, EventArgs e)
         {
-            //This button will split documents checked in checkedlistbox1 that contains selected charachters in their names between folders in checkedlistbox2. Each folder will get an equal number of files. Each folder will get different files.
-            if (checkedListBox1.CheckedItems.Count == 0)
+            //
+        }
+
+        private void ImportWorkersToList()
+        {
+            SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Mkzz\source\repos\Faza1Sorter v4\Faza1Sorter v2\database.mdf;Integrated Security=True");
+            con.Open();
+            SqlCommand command = new SqlCommand("SELECT Name FROM Workers", con);
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
             {
-                MessageBox.Show("Nie wybrano plików");
+                checkedListBox2.Items.Add(reader["Name"].ToString());
             }
-            else if (checkedListBox2.CheckedItems.Count == 0)
-            {
-                MessageBox.Show("Nie wybrano folderów");
-            }
-            else
-            {
-                string folderPath = textBox1.Text;
-                string workerFolder = textBox4.Text;
-                string folderName = checkedListBox2.CheckedItems.ToString();
-                string folderPath2 = workerFolder + "\\" + folderName;
-                int filesPerFolder = checkedListBox1.CheckedItems.Count / checkedListBox2.CheckedItems.Count;
-                int filesLeft = checkedListBox1.CheckedItems.Count % checkedListBox2.CheckedItems.Count;
-                int fileIndex = 0;
-                foreach (string folder in checkedListBox2.CheckedItems)
-                {
-                    string folderPath3 = workerFolder + "\\" + folder;
-                    for (int i = 0; i < filesPerFolder; i++)
-                    {
-                        string filePath = folderPath + "\\" + checkedListBox1.CheckedItems[fileIndex];
-                        string filePath2 = folderPath3 + "\\" + checkedListBox1.CheckedItems[fileIndex];
-                        File.Move(filePath, filePath2);
-                        fileIndex++;
-                    }
-                }
-                for (int i = 0; i < filesLeft; i++)
-                {
-                    string filePath = folderPath + "\\" + checkedListBox1.CheckedItems[fileIndex];
-                    string filePath2 = folderPath2 + "\\" + checkedListBox1.CheckedItems[fileIndex];
-                    File.Move(filePath, filePath2);
-                    fileIndex++;
-                }
-                //moved files will be removed from the checkedlistbox
-                for (int i = 0; i < checkedListBox1.Items.Count; i++)
-                {
-                    if (checkedListBox1.GetItemChecked(i))
-                    {
-                        checkedListBox1.Items.RemoveAt(i);
-                    }
-                }            }
-            MessageBox.Show("Zakończono");
+            reader.Close();
+            con.Close();
+        }
+
+        private void Sorter_Load(object sender, EventArgs e)
+        {
+            ImportWorkersToList();
         }
     }
 }
