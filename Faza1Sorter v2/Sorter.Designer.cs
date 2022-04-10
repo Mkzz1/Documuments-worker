@@ -45,6 +45,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.materialButton3 = new MaterialSkin.Controls.MaterialButton();
             this.materialButton9 = new MaterialSkin.Controls.MaterialButton();
             this.checkedListBox2 = new System.Windows.Forms.CheckedListBox();
             this.panel1.SuspendLayout();
@@ -277,6 +278,7 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.materialButton3);
             this.panel3.Controls.Add(this.materialButton5);
             this.panel3.Controls.Add(this.materialButton6);
             this.panel3.Controls.Add(this.materialLabel1);
@@ -288,6 +290,26 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(681, 642);
             this.panel3.TabIndex = 0;
+            // 
+            // materialButton3
+            // 
+            this.materialButton3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton3.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton3.Depth = 0;
+            this.materialButton3.HighEmphasis = true;
+            this.materialButton3.Icon = null;
+            this.materialButton3.Location = new System.Drawing.Point(503, 6);
+            this.materialButton3.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton3.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton3.Name = "materialButton3";
+            this.materialButton3.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton3.Size = new System.Drawing.Size(174, 36);
+            this.materialButton3.TabIndex = 33;
+            this.materialButton3.Text = "Wskaż bazę danych";
+            this.materialButton3.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton3.UseAccentColor = false;
+            this.materialButton3.UseVisualStyleBackColor = true;
+            this.materialButton3.Click += new System.EventHandler(this.materialButton3_Click);
             // 
             // materialButton9
             // 
@@ -311,6 +333,7 @@
             // 
             // checkedListBox2
             // 
+            this.checkedListBox2.CheckOnClick = true;
             this.checkedListBox2.FormattingEnabled = true;
             this.checkedListBox2.Location = new System.Drawing.Point(811, 172);
             this.checkedListBox2.Name = "checkedListBox2";
@@ -362,5 +385,6 @@
         private Panel panel3;
         private MaterialSkin.Controls.MaterialButton materialButton9;
         private CheckedListBox checkedListBox2;
+        private MaterialSkin.Controls.MaterialButton materialButton3;
     }
 }

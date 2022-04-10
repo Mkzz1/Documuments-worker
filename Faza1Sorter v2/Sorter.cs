@@ -9,6 +9,7 @@ namespace Faza1Sorter_v2
     public partial class Sorter : MaterialForm
     {
         string[] files;
+        string line = File.ReadLines(@"C:\SORTER\settings.txt").Skip(6).Take(1).First();
         public Sorter()
         {
             InitializeComponent();
@@ -131,7 +132,7 @@ namespace Faza1Sorter_v2
                     files[i] = checkedListBox1.CheckedItems[i].ToString();
                 }
                 //get FolderLocation from database
-                SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Mkzz\source\repos\Faza1Sorter v4\Faza1Sorter v2\database.mdf;Integrated Security=True");
+                SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename="+line+";Integrated Security=True");
                 con.Open();
                 //get checked Name as string from database
                 string checkedName = "";
@@ -181,14 +182,6 @@ namespace Faza1Sorter_v2
             }
         }
 
-        private void materialButton10_Click(object sender, EventArgs e)
-        {
-            //this button will open mainMenu.cs
-            mainMenu mainMenu = new mainMenu();
-            mainMenu.Show();
-            this.Hide();
-        }
-
         private void materialButton5_Click(object sender, EventArgs e)
         {
             //open editUser.cs
@@ -198,17 +191,34 @@ namespace Faza1Sorter_v2
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+            //Add first ten charachters from checked files names from checkedlistbox1 to materialMultiLineTextBox21. Separate them by new line.
+            //if name duplicate in materialMultiLineTextBox21 add only once
+            materialMultiLineTextBox21.Text = "";
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                if (checkedListBox1.GetItemChecked(i))
+                {
+                    string fileName = Path.GetFileName(files[i]);
+                    if (materialMultiLineTextBox21.Text.Contains(fileName.Substring(0, 10)))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        materialMultiLineTextBox21.Text += fileName.Substring(0, 10) + "\r\n";
+                    }
+                }
+            }
         }
 
         private void materialButton9_Click(object sender, EventArgs e)
         {
-            //
+            //This button will move checkedlisbox1 checked files between folders on checkedlistbox2
         }
 
         private void ImportWorkersToList()
         {
-            SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Mkzz\source\repos\Faza1Sorter v4\Faza1Sorter v2\database.mdf;Integrated Security=True");
+            SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + line + ";Integrated Security=True");
             con.Open();
             SqlCommand command = new SqlCommand("SELECT Name FROM Workers", con);
             SqlDataReader reader = command.ExecuteReader();
@@ -223,6 +233,30 @@ namespace Faza1Sorter_v2
         private void Sorter_Load(object sender, EventArgs e)
         {
             ImportWorkersToList();
+            CheckSettings();
+        }
+
+        private void materialButton3_Click(object sender, EventArgs e)
+        {
+            //open database.cs
+            database database = new database();
+            database.Show();
+        }
+
+        private void CheckSettings()
+        {
+            string path = @"C:\SORTER\settings.txt";
+            //check if C:\SORTER\settings.txt exists. If not create it. Write lines on it.
+            if (!File.Exists(path))
+            {
+                File.Create(path);
+            }
+            //if settings.txt is empty, program will fill display message box with text "Pamiętaj by ustawić ścieżki folderów w ustawieniach!"
+            if (File.ReadAllText(path) == "")
+            {
+                string[] lines = { "1", "2", "3", "4", "5", "6", "1 database" };
+                File.WriteAllLines(path, lines);
+            }
         }
     }
 }
