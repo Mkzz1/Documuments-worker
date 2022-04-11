@@ -1,15 +1,13 @@
 ﻿using MaterialSkin;
 using MaterialSkin.Controls;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
+using System.Data.SQLite;
 
 namespace Faza1Sorter_v2
 {
     public partial class Sorter : MaterialForm
     {
         string[] files;
-        string line = File.ReadLines(@"C:\SORTER\settings.txt").Skip(6).Take(1).First();
+        string line = "C:\\SORTER\\database.mdf";
         public Sorter()
         {
             InitializeComponent();
@@ -107,11 +105,6 @@ namespace Faza1Sorter_v2
             }
         }
 
-        private void materialButton7_Click(object sender, EventArgs e)
-        {
-            
-        }
-
         private void materialButton4_Click(object sender, EventArgs e)
         {
             //this button will move checked in checkedlistbox1 files to FolderLocation from database
@@ -132,7 +125,7 @@ namespace Faza1Sorter_v2
                     files[i] = checkedListBox1.CheckedItems[i].ToString();
                 }
                 //get FolderLocation from database
-                SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename="+line+";Integrated Security=True");
+                SQLiteConnection con = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
                 con.Open();
                 //get checked Name as string from database
                 string checkedName = "";
@@ -142,8 +135,8 @@ namespace Faza1Sorter_v2
                 }
                 //get FolderLocation from database
                 string query = "SELECT FolderLocation FROM Workers WHERE Name = '" + checkedName + "'";
-                SqlCommand cmd = new SqlCommand(query, con);
-                SqlDataReader reader = cmd.ExecuteReader();
+                SQLiteCommand cmd = new SQLiteCommand(query, con);
+                SQLiteDataReader reader = cmd.ExecuteReader();
                 string folderLocation = "";
                 while (reader.Read())
                 {
@@ -163,18 +156,18 @@ namespace Faza1Sorter_v2
                     checkedListBox1.Items.Remove(checkedListBox1.CheckedItems[i]);
                 }
                 //count how many files in folder has the same first ten charachters in their name. save number of files as int
-                int count = 0;
+                List<string> list = new List<string>();
                 foreach (string file in Directory.GetFiles(folderLocation))
                 {
                     string fileName = Path.GetFileName(file);
-                    if (fileName.Substring(0, 10) == fileName.Substring(0, 10))
-                    {
-                        count++;
-                    }
+                    list.Add(fileName.Substring(0, 10));
                 }
-                //Add count to database in NumOfWork
+                list = list.Distinct().ToList();
+                //count how many items are in list
+                int count = list.Count;
+                //add count to database in NumOfWork
                 query = "UPDATE Workers SET NumOfWork = NumOfWork + " + count + " WHERE Name = '" + checkedName + "'";
-                cmd = new SqlCommand(query, con);
+                cmd = new SQLiteCommand(query, con);
                 cmd.ExecuteNonQuery();
                 con.Close();
 
@@ -211,17 +204,12 @@ namespace Faza1Sorter_v2
             }
         }
 
-        private void materialButton9_Click(object sender, EventArgs e)
-        {
-            //This button will move checkedlisbox1 checked files between folders on checkedlistbox2
-        }
-
         private void ImportWorkersToList()
         {
-            SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + line + ";Integrated Security=True");
+            SQLiteConnection con = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
             con.Open();
-            SqlCommand command = new SqlCommand("SELECT Name FROM Workers", con);
-            SqlDataReader reader = command.ExecuteReader();
+            SQLiteCommand command = new SQLiteCommand("SELECT Name FROM Workers", con);
+            SQLiteDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
                 checkedListBox2.Items.Add(reader["Name"].ToString());
@@ -235,32 +223,45 @@ namespace Faza1Sorter_v2
             CheckSettings();
         }
 
-        private void materialButton3_Click(object sender, EventArgs e)
-        {
-            //open database.cs
-            database database = new database();
-            database.Show();
-        }
-
         private void CheckSettings()
         {
-            string path = @"C:\SORTER\settings.txt";
-            //check if C:\SORTER\settings.txt exists. If not create it. Write lines on it.
-            if (!File.Exists(path))
+            //this function will check if database.mdf is created in C:\SORTER path. If not, it will create it. With table Workers, columns Name, FolderLocation, Limit, NumOfWork
+            //if database.mdf is created, it will check if table Workers is created. If not, it will create it.
+
+            //check if database.mdf is created
+            if (!File.Exists(line))
             {
-                File.Create(path);
+                SQLiteConnection.CreateFile(line);
+                SQLiteConnection con = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
+                con.Open();
+                string query = "CREATE TABLE Workers (Name VARCHAR(50), FolderLocation VARCHAR(550), LimitOfWork INT, NumOfWork INT)";
+                SQLiteCommand cmd = new SQLiteCommand(query, con);
+                cmd.ExecuteNonQuery();
+                con.Close();
             }
-            //if settings.txt is empty, program will fill display message box with text "Pamiętaj by ustawić ścieżki folderów w ustawieniach!"
-            if (File.ReadAllText(path) == "")
+            else
             {
-                string[] lines = { "1", "2", "3", "4", "5", "6", "1 database" };
-                File.WriteAllLines(path, lines);
+                ImportWorkersToList();
             }
         }
 
-        private void materialButton7_Click_1(object sender, EventArgs e)
+        private void materialSwitch1_CheckedChanged(object sender, EventArgs e)
         {
-            ImportWorkersToList();
+            //this switch will change the color of the form to dark mode.
+            if (materialSwitch1.Checked)
+            {
+                var materialSkinManager = MaterialSkinManager.Instance;
+                materialSkinManager.AddFormToManage(this);
+                materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
+                materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
+            }
+            else
+            {
+                var materialSkinManager = MaterialSkinManager.Instance;
+                materialSkinManager.AddFormToManage(this);
+                materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+                materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
+            }
         }
     }
 }

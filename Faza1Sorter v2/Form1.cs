@@ -529,10 +529,53 @@ namespace Faza1Sorter_v2
             {
                 File.Create(@"C:\\SORTER\\settings.txt");
             }
+            //check if buttons.txt is created and if not create it in C:\SORTER folder
+            if (!File.Exists(@"C:\\SORTER\\buttons.txt"))
+            {
+                File.Create(@"C:\\SORTER\\buttons.txt");
+            }
+            if (File.ReadAllText(@"C:\\SORTER\\buttons.txt") == "")
+            {
+                string path = @"C:\\SORTER\\buttons.txt";
+                string[] lines = { "DO WYS£ANIA MAIL", "TELEFON / SMS", "6110", "TRANZYT", "BK", "INNE", };
+                System.IO.File.WriteAllLines(path, lines);
+            }
             //if settings.txt is empty, program will fill display message box with text "Pamiêtaj by ustawiæ œcie¿ki folderów w ustawieniach!"
             if (File.ReadAllText(@"C:\\SORTER\\settings.txt") == "")
             {
                 MessageBox.Show("Pamiêtaj by ustawiæ œcie¿ki folderów w ustawieniach!");
+            }
+
+            //change name of a button to a string from buttons.txt. If string is empty, button will keep its name.
+            string line1 = File.ReadLines(@"C:\\SORTER\\buttons.txt").Skip(0).Take(1).First();
+            if (line1 != "")
+            {
+                button2.Text = line1;
+            }
+            string line2 = File.ReadLines(@"C:\\SORTER\\buttons.txt").Skip(1).Take(1).First();
+            if (line2 != "")
+            {
+                button3.Text = line2;
+            }
+            string line3 = File.ReadLines(@"C:\\SORTER\\buttons.txt").Skip(2).Take(1).First();
+            if (line3 != "")
+            {
+                button4.Text = line3;
+            }
+            string line4 = File.ReadLines(@"C:\\SORTER\\buttons.txt").Skip(3).Take(1).First();
+            if (line4 != "")
+            {
+                button11.Text = line4;
+            }
+            string line5 = File.ReadLines(@"C:\\SORTER\\buttons.txt").Skip(4).Take(1).First();
+            if (line5 != "")
+            {
+                button10.Text = line5;
+            }
+            string line6 = File.ReadLines(@"C:\\SORTER\\buttons.txt").Skip(5).Take(1).First();
+            if (line6 != "")
+            {
+                button9.Text = line6;
             }
         }
 

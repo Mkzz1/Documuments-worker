@@ -3,9 +3,10 @@ using MaterialSkin.Controls;
 
 namespace Faza1Sorter_v2
 {
-    public partial class settings : MaterialForm
+    public partial class buttons : MaterialForm
     {
-        public settings()
+        
+        public buttons()
         {
             InitializeComponent();
             var materialSkinManager = MaterialSkinManager.Instance;
@@ -16,24 +17,17 @@ namespace Faza1Sorter_v2
 
         private void materialButton1_Click(object sender, EventArgs e)
         {
-            //if textboxes are empty, show messagebox
             if (textBox1.Text == "" || textBox2.Text == "" || textBox3.Text == "" || textBox4.Text == "" || textBox5.Text == "" || textBox6.Text == "")
             {
                 MessageBox.Show("Wypełnij wszystkie pola!");
             }
             else
             {
-                string path = @"C:\SORTER\settings.txt";
-                string[] lines = { textBox1.Text, textBox2.Text, textBox3.Text, textBox4.Text, textBox5.Text, textBox6.Text, };
+                //this button will save values put in textboxes in C:\SORTER\buttons.txt file in new lines. If already exists, it will be overwritten.
+                string path = @"C:\SORTER\buttons.txt";
+                string[] lines = { textBox1.Text, textBox2.Text, textBox3.Text, textBox6.Text, textBox5.Text, textBox4.Text, };
                 System.IO.File.WriteAllLines(path, lines);
             }
-        }
-
-        private void materialButton2_Click(object sender, EventArgs e)
-        {
-            //open buttons.cs
-            buttons b = new buttons();
-            b.Show();
         }
     }
 }
