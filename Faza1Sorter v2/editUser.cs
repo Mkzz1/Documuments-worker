@@ -65,5 +65,16 @@ namespace Faza1Sorter_v2
                 MessageBox.Show("Użytkownik usunięty!");
             }
         }
+
+        private void materialButton3_Click(object sender, EventArgs e)
+        {
+            //this button will set 0 to NumOfWork to every worker
+            SQLiteConnection con = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
+            con.Open();
+            SQLiteCommand cmd = new SQLiteCommand("UPDATE Workers SET NumOfWork = '0'", con);
+            cmd.ExecuteNonQuery();
+            con.Close();
+            MessageBox.Show("Wyzerowano przydział");
+        }
     }
 }

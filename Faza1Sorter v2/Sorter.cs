@@ -83,12 +83,13 @@ namespace Faza1Sorter_v2
             {
                 MessageBox.Show("Wprowadź nazwę pliku");
             }
-            else if (checkedListBox1.Items.Count == 0)
+            if(textBox1.Text == String.Empty)
             {
-                MessageBox.Show("Wybierz pliki");
+                MessageBox.Show("Załaduj pliki");
             }
             else
             {
+                //remove last new line from textbox
                 string[] characters = materialMultiLineTextBox21.Text.Split("\r\n");
                 checkedListBox1.Items.Clear();
                 foreach (string file in files)
@@ -113,9 +114,13 @@ namespace Faza1Sorter_v2
             //remove files from checkedlistbox1
             if (checkedListBox2.CheckedItems.Count > 1)
             {
-                MessageBox.Show("Wybierz tylko jedną pozycję");
+                MessageBox.Show("Wybierz tylko jednego pracownika");
             }
-            else
+            else if (checkedListBox1.CheckedItems.Count > 1)
+            {
+                MessageBox.Show("Nie wybrano plików");
+            }
+            else 
             {
                 //get checked files from checkedlistbox1 in textbox1 folder
                 string location = textBox1.Text;
@@ -227,7 +232,10 @@ namespace Faza1Sorter_v2
         {
             //this function will check if database.mdf is created in C:\SORTER path. If not, it will create it. With table Workers, columns Name, FolderLocation, Limit, NumOfWork
             //if database.mdf is created, it will check if table Workers is created. If not, it will create it.
-
+            if (!Directory.Exists(@"C:\\SORTER"))
+            {
+                Directory.CreateDirectory(@"C:\\SORTER");
+            }
             //check if database.mdf is created
             if (!File.Exists(line))
             {
@@ -261,6 +269,93 @@ namespace Faza1Sorter_v2
                 materialSkinManager.AddFormToManage(this);
                 materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
                 materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
+            }
+        }
+
+        private void materialButton3_Click(object sender, EventArgs e)
+        {
+            //if checkedlistbox1 no items checked, show messagebox
+            if (checkedListBox1.CheckedItems.Count == 0)
+            {
+                MessageBox.Show("Nie wybrano żadnych plików");
+            }
+            else if (checkedListBox2.CheckedItems.Count == 0)
+            {
+                MessageBox.Show("Nie wybrano folderów");
+            }
+            else
+            {
+                //import checked files name from checkedlistbox1 to string list. Import only first ten charachters from checked files name.
+                List<string> list = new List<string>();
+                for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                {
+                    if (checkedListBox1.GetItemChecked(i))
+                    {
+                        string fileName = Path.GetFileName(files[i]);
+                        list.Add(fileName.Substring(0, 10));
+                    }
+                }
+                list = list.Distinct().ToList();
+                //get files from textBox1 folder
+                string[] files1 = Directory.GetFiles(textBox1.Text);
+                //get checked Names in checkedlistbox 1 as string list
+                List<string> checkedNames = new List<string>();
+                for (int b = 0; b < checkedListBox2.Items.Count; b++)
+                {
+                    if (checkedListBox2.GetItemChecked(b))
+                    {
+                        checkedNames.Add(checkedListBox2.Items[b].ToString());
+                    }
+                }
+                for (int c = 0; c < checkedListBox2.CheckedItems.Count; c++)
+                {
+                    checkedNames[c] = checkedListBox2.CheckedItems[c].ToString();
+                }
+                //in database find all FolderLocation assigned to checkednames and save them to string list
+                List<string> folderLocations = new List<string>();
+                SQLiteConnection con = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
+                con.Open();
+                for (int d = 0; d < checkedNames.Count; d++)
+                {
+                    string query = "SELECT FolderLocation FROM Workers WHERE Name = '" + checkedNames[d] + "'";
+                    SQLiteCommand cmd = new SQLiteCommand(query, con);
+                    SQLiteDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        folderLocations.Add(reader["FolderLocation"].ToString());
+                    }
+                }
+                con.Close();
+                //check if file1 contain fileName from list. If yes, move all files that contain first item to list to first folder, second item to second folder and so on. If folderLocations list comes to an end, start from begining until list ist empty.
+                //if multiple folders selected, every folder will get same amount of files.
+                for (int i = 0; i < list.Count; i++)
+                {
+                    for (int j = 0; j < files1.Length; j++)
+                    {
+                        if (Path.GetFileName(files1[j]).Contains(list[i]))
+                        {
+                            if (folderLocations.Count == 0)
+                            {
+                                folderLocations.Add(folderLocations[0]);
+                            }
+                            //move file to folder
+                            string source = files1[j];
+                            string destination = folderLocations[i % folderLocations.Count];
+                            File.Move(source, destination + "\\" + Path.GetFileName(source));
+                            //add +1 to NumOfWork column in database assigned to folderLocation each time a file is moved
+                            SQLiteConnection con1 = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
+                            con1.Open();
+                            string query = "UPDATE Workers SET NumOfWork = NumOfWork + 1 WHERE FolderLocation = '" + folderLocations[i % folderLocations.Count] + "'";
+                            SQLiteCommand cmd = new SQLiteCommand(query, con1);
+                            cmd.ExecuteNonQuery();
+                            con1.Close();
+                        }
+                    }
+                }
+                //if all files are moved, show messagebox
+                MessageBox.Show("Wszystkie pliki zostały przeniesione");
+                //clear every checkedlistbox1 items
+                checkedListBox1.Items.Clear();
             }
         }
     }

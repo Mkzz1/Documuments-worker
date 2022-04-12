@@ -38,6 +38,7 @@
             this.materialButton2 = new MaterialSkin.Controls.MaterialButton();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.materialLabel4 = new MaterialSkin.Controls.MaterialLabel();
+            this.materialButton3 = new MaterialSkin.Controls.MaterialButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.SuspendLayout();
@@ -149,11 +150,32 @@
             this.materialLabel4.TabIndex = 15;
             this.materialLabel4.Text = "Ilość spraw";
             // 
+            // materialButton3
+            // 
+            this.materialButton3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton3.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton3.Depth = 0;
+            this.materialButton3.HighEmphasis = true;
+            this.materialButton3.Icon = null;
+            this.materialButton3.Location = new System.Drawing.Point(584, 285);
+            this.materialButton3.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton3.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton3.Name = "materialButton3";
+            this.materialButton3.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton3.Size = new System.Drawing.Size(168, 36);
+            this.materialButton3.TabIndex = 17;
+            this.materialButton3.Text = "Wyzeruj przydział";
+            this.materialButton3.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton3.UseAccentColor = false;
+            this.materialButton3.UseVisualStyleBackColor = true;
+            this.materialButton3.Click += new System.EventHandler(this.materialButton3_Click);
+            // 
             // editUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(832, 641);
+            this.Controls.Add(this.materialButton3);
             this.Controls.Add(this.numericUpDown2);
             this.Controls.Add(this.materialLabel4);
             this.Controls.Add(this.materialLabel3);
@@ -185,5 +207,6 @@
         private MaterialSkin.Controls.MaterialButton materialButton2;
         private NumericUpDown numericUpDown2;
         private MaterialSkin.Controls.MaterialLabel materialLabel4;
+        private MaterialSkin.Controls.MaterialButton materialButton3;
     }
 }
