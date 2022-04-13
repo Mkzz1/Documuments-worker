@@ -19,16 +19,16 @@ namespace Faza1Sorter_v2
 
         private void materialButton2_Click(object sender, EventArgs e)
         {
-            if (textBox3.Text == String.Empty)
+            //if textboxes are empty, show message box
+            if (textBox3.Text == "" || textBox2.Text == "")
             {
-                MessageBox.Show("Wypełnij pole imię!");
+                MessageBox.Show("Wypełnij wszystkie pola tekstowe!");
             }
-            else
             {
                 //Update worker wih new values
                 SQLiteConnection con = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
                 con.Open();
-                SQLiteCommand cmd = new SQLiteCommand("UPDATE Workers SET Name = '" + textBox3.Text + "', FolderLocation = '" + textBox2.Text + "', NumOfWork = '" + numericUpDown2.Text + "' LimitOfWork = '" + numericUpDown1.Text + "' WHERE Name = '" + textBox3.Text + "'", con);
+                SQLiteCommand cmd = new SQLiteCommand("UPDATE Workers SET Name = '" + textBox3.Text + "', FolderLocation = '" + textBox2.Text + "', NumOfWork = '" + numericUpDown2.Text + "', LimitOfWork = '" + numericUpDown1.Text + "' WHERE Name = '" + textBox3.Text + "'", con);
                 cmd.ExecuteNonQuery();
                 con.Close();
                 MessageBox.Show("Zaktualizowano dane pracownika!");

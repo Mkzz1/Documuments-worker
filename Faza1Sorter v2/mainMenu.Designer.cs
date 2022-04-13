@@ -165,7 +165,7 @@
             // 
             this.pictureBox2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(5, 19);
+            this.pictureBox2.Location = new System.Drawing.Point(13, 19);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(288, 60);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -186,14 +186,14 @@
             this.panel1.Controls.Add(this.materialButton3);
             this.panel1.Location = new System.Drawing.Point(225, 67);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(309, 387);
+            this.panel1.Size = new System.Drawing.Size(325, 370);
             this.panel1.TabIndex = 19;
             // 
             // mainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(767, 646);
+            this.ClientSize = new System.Drawing.Size(783, 629);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

@@ -38,7 +38,10 @@ namespace Faza1Sorter_v2
 
                 //show a messagebox
                 MessageBox.Show("Dodano pracownika");
-
+            }
+            else
+            {
+                MessageBox.Show("Wypełnij wszystkie pola");
             }
         }
     }

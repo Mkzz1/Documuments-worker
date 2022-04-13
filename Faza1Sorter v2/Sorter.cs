@@ -326,9 +326,6 @@ namespace Faza1Sorter_v2
                     }
                 }
                 con.Close();
-                //create list of ints 
-                List<int> limitOfWork = new List<int>();
-                
                 //check if file1 contain fileName from list. If yes, move all files that contain first item to list to first folder, second item to second folder and so on. If folderLocations list comes to an end, start from begining until list ist empty.
                 //if multiple folders selected, every folder will get same amount of files.
                 for (int i = 0; i < list.Count; i++)
@@ -345,7 +342,6 @@ namespace Faza1Sorter_v2
                             string source = files1[j];
                             string destination = folderLocations[i % folderLocations.Count];
                             //Create a txt file in C: \ SORTER for each of the folders on the list, write down the first 10 characters of the transferred file name in this file.Remove duplicates
-
                             if (!File.Exists(destination + "\\" + list[i] + ".txt"))
                             {
                                 File.WriteAllText(destination + "\\" + list[i] + ".txt", list[i]);
@@ -354,6 +350,7 @@ namespace Faza1Sorter_v2
                             {
                                 File.AppendAllText(destination + "\\" + list[i] + ".txt", list[i]);
                             }
+                            //move file to folder
                             File.Move(source, destination + "\\" + Path.GetFileName(source));
                         }
                     }
@@ -389,6 +386,35 @@ namespace Faza1Sorter_v2
                             File.Delete(files2[j]);
                         }
                     }
+                }
+                //if NumOfWork is bigger than LimitOfWork number from database, show messagebox
+                for (int i = 0; i < folderLocations.Count; i++)
+                {
+                    con = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
+                    con.Open();
+                    string query = "SELECT NumOfWork FROM Workers WHERE FolderLocation = '" + folderLocations[i] + "'";
+                    SQLiteCommand cmd = new SQLiteCommand(query, con);
+                    SQLiteDataReader reader = cmd.ExecuteReader();
+                    //save NumOfWork to int variable
+                    int numOfWork = 0;
+                    while (reader.Read())
+                    {
+                        numOfWork = Convert.ToInt32(reader["NumOfWork"]);
+                    }
+                    string query1 = "SELECT LimitOfWork FROM Workers WHERE FolderLocation = '" + folderLocations[i] + "'";
+                    SQLiteCommand cmd1 = new SQLiteCommand(query1, con);
+                    SQLiteDataReader reader1 = cmd1.ExecuteReader();
+                    //save LimitOfWork to int variable
+                    int limitOfWork = 0;
+                    while (reader1.Read())
+                    {
+                        limitOfWork = Convert.ToInt32(reader1["LimitOfWork"]);
+                    }
+                    if (numOfWork > limitOfWork)
+                    {
+                        MessageBox.Show("Przekroczono limit pracy w folderze " + folderLocations[i] + "\nPamiętaj o RĘCZNYM przeniesieniu plików do innych folderów!");
+                    }
+                    con.Close();
                 }
                 //if all files are moved, show messagebox
                 MessageBox.Show("Wszystkie pliki zostały przeniesione");

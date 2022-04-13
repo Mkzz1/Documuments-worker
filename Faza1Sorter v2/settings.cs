@@ -35,5 +35,23 @@ namespace Faza1Sorter_v2
             buttons b = new buttons();
             b.Show();
         }
+
+        private void ChangeLabels()
+        {
+            //this function will import names from lines in buttons.txt and change labels text to them. Like label1 = first line of buttons.txt and so on
+            string path = @"C:\SORTER\buttons.txt";
+            string[] lines = System.IO.File.ReadAllLines(path);
+            materialLabel1.Text = lines[0];
+            materialLabel2.Text = lines[1];
+            materialLabel3.Text = lines[3];
+            materialLabel4.Text = lines[2];
+            materialLabel6.Text = lines[4];
+            materialLabel5.Text = lines[5];
+        }
+
+        private void settings_Load(object sender, EventArgs e)
+        {
+            ChangeLabels();
+        }
     }
 }
