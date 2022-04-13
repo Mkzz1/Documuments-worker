@@ -28,7 +28,7 @@ namespace Faza1Sorter_v2
                 //Update worker wih new values
                 SQLiteConnection con = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
                 con.Open();
-                SQLiteCommand cmd = new SQLiteCommand("UPDATE Workers SET Name = '" + textBox3.Text + "', FolderLocation = '" + textBox2.Text + "', NumOfWork = '" + numericUpDown2.Text + "' WHERE Name = '" + textBox3.Text + "'", con);
+                SQLiteCommand cmd = new SQLiteCommand("UPDATE Workers SET Name = '" + textBox3.Text + "', FolderLocation = '" + textBox2.Text + "', NumOfWork = '" + numericUpDown2.Text + "' LimitOfWork = '" + numericUpDown1.Text + "' WHERE Name = '" + textBox3.Text + "'", con);
                 cmd.ExecuteNonQuery();
                 con.Close();
                 MessageBox.Show("Zaktualizowano dane pracownika!");

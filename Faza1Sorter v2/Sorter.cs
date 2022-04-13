@@ -326,6 +326,9 @@ namespace Faza1Sorter_v2
                     }
                 }
                 con.Close();
+                //create list of ints 
+                List<int> limitOfWork = new List<int>();
+                
                 //check if file1 contain fileName from list. If yes, move all files that contain first item to list to first folder, second item to second folder and so on. If folderLocations list comes to an end, start from begining until list ist empty.
                 //if multiple folders selected, every folder will get same amount of files.
                 for (int i = 0; i < list.Count; i++)
@@ -341,14 +344,49 @@ namespace Faza1Sorter_v2
                             //move file to folder
                             string source = files1[j];
                             string destination = folderLocations[i % folderLocations.Count];
+                            //Create a txt file in C: \ SORTER for each of the folders on the list, write down the first 10 characters of the transferred file name in this file.Remove duplicates
+
+                            if (!File.Exists(destination + "\\" + list[i] + ".txt"))
+                            {
+                                File.WriteAllText(destination + "\\" + list[i] + ".txt", list[i]);
+                            }
+                            else
+                            {
+                                File.AppendAllText(destination + "\\" + list[i] + ".txt", list[i]);
+                            }
                             File.Move(source, destination + "\\" + Path.GetFileName(source));
-                            //add +1 to NumOfWork column in database assigned to folderLocation each time a file is moved
-                            SQLiteConnection con1 = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
-                            con1.Open();
-                            string query = "UPDATE Workers SET NumOfWork = NumOfWork + 1 WHERE FolderLocation = '" + folderLocations[i % folderLocations.Count] + "'";
-                            SQLiteCommand cmd = new SQLiteCommand(query, con1);
-                            cmd.ExecuteNonQuery();
-                            con1.Close();
+                        }
+                    }
+                }
+                //Count how many files with the .txt extension are in each of the folders with folderLocations. Assign a number of files to the NumOfWork of each folder.
+                for (int i = 0; i < folderLocations.Count; i++)
+                {
+                    string[] files2 = Directory.GetFiles(folderLocations[i]);
+                    int numOfWork = 0;
+                    for (int j = 0; j < files2.Length; j++)
+                    {
+                        if (Path.GetExtension(files2[j]) == ".txt")
+                        {
+                            numOfWork++;
+                        }
+                    }
+                    //update database
+                    con = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
+                    con.Open();
+                    string query = "UPDATE Workers SET NumOfWork = NumOfWork +" + numOfWork + " WHERE FolderLocation = '" + folderLocations[i] + "'";
+                    SQLiteCommand cmd = new SQLiteCommand(query, con);
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                //delete all files with .txt extension from folders
+                for (int i = 0; i < folderLocations.Count; i++)
+                {
+                    string[] files2 = Directory.GetFiles(folderLocations[i]);
+                    for (int j = 0; j < files2.Length; j++)
+                    {
+                        if (Path.GetExtension(files2[j]) == ".txt")
+                        {
+                            File.Delete(files2[j]);
                         }
                     }
                 }
