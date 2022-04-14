@@ -35,7 +35,10 @@
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // materialButton1
@@ -98,6 +101,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.materialLabel2);
+            this.panel1.Controls.Add(this.numericUpDown1);
             this.panel1.Controls.Add(this.materialButton1);
             this.panel1.Controls.Add(this.textBox3);
             this.panel1.Controls.Add(this.materialLabel1);
@@ -107,6 +112,25 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(494, 250);
             this.panel1.TabIndex = 7;
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(125, 107);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 23);
+            this.numericUpDown1.TabIndex = 7;
+            // 
+            // materialLabel2
+            // 
+            this.materialLabel2.AutoSize = true;
+            this.materialLabel2.Depth = 0;
+            this.materialLabel2.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialLabel2.Location = new System.Drawing.Point(82, 108);
+            this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel2.Name = "materialLabel2";
+            this.materialLabel2.Size = new System.Drawing.Size(37, 19);
+            this.materialLabel2.TabIndex = 8;
+            this.materialLabel2.Text = "Limit";
             // 
             // userAdd
             // 
@@ -119,6 +143,7 @@
             this.Text = "Dodaj pracownika";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -131,5 +156,7 @@
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private MaterialSkin.Controls.MaterialLabel materialLabel3;
         private Panel panel1;
+        private MaterialSkin.Controls.MaterialLabel materialLabel2;
+        private NumericUpDown numericUpDown1;
     }
 }

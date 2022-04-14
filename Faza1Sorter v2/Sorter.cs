@@ -25,7 +25,7 @@ namespace Faza1Sorter_v2
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
                 string folderPath = folderBrowserDialog1.SelectedPath;
-                files = Directory.GetFiles(folderPath, "*.TIF");
+                files = Directory.GetFiles(folderPath, "*");
                 checkedListBox1.Items.Clear();
                 foreach (string file in files)
                 {
@@ -175,6 +175,7 @@ namespace Faza1Sorter_v2
                 cmd = new SQLiteCommand(query, con);
                 cmd.ExecuteNonQuery();
                 con.Close();
+
 
                 MessageBox.Show("Pliki zostały przeniesione");
             }

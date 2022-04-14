@@ -24,11 +24,16 @@ namespace Faza1Sorter_v2
                 string name = textBox3.Text;
                 string folder = textBox2.Text;
                 int NumOfWork = 0;
-
+                int LimitOfWork = 0;
+                //save numericUpDown1 as int LimitOfWork
+                if (numericUpDown1.Value != 0)
+                {
+                    LimitOfWork = (int)numericUpDown1.Value;
+                }
                 //add those values to sql using sql client. ID will be auto generated like 1, 2, 3,4 etc.
                 SQLiteConnection con = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
                 con.Open();
-                SQLiteCommand cmd = new SQLiteCommand("INSERT INTO [Workers] ([Name],[FolderLocation],[NumOfWork]) VALUES ('" + name + "','" + folder + "','" + NumOfWork + "')", con);
+                SQLiteCommand cmd = new SQLiteCommand("INSERT INTO [Workers] ([Name],[FolderLocation],[LimitOfWork],[NumOfWork]) VALUES ('" + name + "','" + folder + "','" + LimitOfWork + "','" + NumOfWork + "')", con);
                 cmd.ExecuteNonQuery();
                 con.Close();
 
