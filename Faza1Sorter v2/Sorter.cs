@@ -116,7 +116,7 @@ namespace Faza1Sorter_v2
             {
                 MessageBox.Show("Wybierz tylko jednego pracownika");
             }
-            else if (checkedListBox1.CheckedItems.Count > 1)
+            else if (checkedListBox1.CheckedItems.Count < 1)
             {
                 MessageBox.Show("Nie wybrano plików");
             }

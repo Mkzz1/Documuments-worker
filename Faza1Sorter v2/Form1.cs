@@ -57,14 +57,14 @@ namespace Faza1Sorter_v2
                         string[] fileName = file.Split('\\');
                         ListViewItem item = new ListViewItem(fileName[fileName.Length - 1]);
                         item.SubItems.Add(file);
-                        //if file is .tif file, it will be added to listview
-                        if (file.Contains(".TIF"))
-                        {
-                            listView1.Items.Add(item);
-                        }
+                    //if file is .tif file or .TIF, it will be added to listview
+                    if (file.Contains(".tif") || file.Contains(".TIF") || file.Contains(".tiff") || file.Contains(".TIFF"))
+                    {
+                        listView1.Items.Add(item);
                     }
-                    //selected picture in listview will be shown in picturebox
-                    listView1.SelectedIndexChanged += (s, args) =>
+                }
+                //selected picture in listview will be shown in picturebox
+                listView1.SelectedIndexChanged += (s, args) =>
                     {
                         if (listView1.SelectedItems.Count > 0)
                         {
