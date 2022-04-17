@@ -44,6 +44,7 @@
             this.materialButton5 = new MaterialSkin.Controls.MaterialButton();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.convertBttn = new MaterialSkin.Controls.MaterialButton();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -76,7 +77,7 @@
             this.materialButton2.Depth = 0;
             this.materialButton2.HighEmphasis = true;
             this.materialButton2.Icon = null;
-            this.materialButton2.Location = new System.Drawing.Point(68, 105);
+            this.materialButton2.Location = new System.Drawing.Point(142, 105);
             this.materialButton2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton2.Name = "materialButton2";
@@ -96,7 +97,7 @@
             this.materialButton4.Depth = 0;
             this.materialButton4.HighEmphasis = true;
             this.materialButton4.Icon = null;
-            this.materialButton4.Location = new System.Drawing.Point(32, 268);
+            this.materialButton4.Location = new System.Drawing.Point(38, 268);
             this.materialButton4.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton4.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton4.Name = "materialButton4";
@@ -164,7 +165,7 @@
             this.materialMultiLineTextBox21.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
             this.materialMultiLineTextBox21.Depth = 0;
             this.materialMultiLineTextBox21.HideSelection = true;
-            this.materialMultiLineTextBox21.Location = new System.Drawing.Point(-1, 150);
+            this.materialMultiLineTextBox21.Location = new System.Drawing.Point(5, 150);
             this.materialMultiLineTextBox21.MaxLength = 32767;
             this.materialMultiLineTextBox21.MouseState = MaterialSkin.MouseState.OUT;
             this.materialMultiLineTextBox21.Name = "materialMultiLineTextBox21";
@@ -216,7 +217,7 @@
             this.materialButton3.Depth = 0;
             this.materialButton3.HighEmphasis = true;
             this.materialButton3.Icon = null;
-            this.materialButton3.Location = new System.Drawing.Point(54, 316);
+            this.materialButton3.Location = new System.Drawing.Point(60, 316);
             this.materialButton3.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton3.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton3.Name = "materialButton3";
@@ -234,7 +235,7 @@
             this.materialSwitch1.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.materialSwitch1.AutoSize = true;
             this.materialSwitch1.Depth = 0;
-            this.materialSwitch1.Location = new System.Drawing.Point(342, 2);
+            this.materialSwitch1.Location = new System.Drawing.Point(332, 2);
             this.materialSwitch1.Margin = new System.Windows.Forms.Padding(0);
             this.materialSwitch1.MouseLocation = new System.Drawing.Point(-1, -1);
             this.materialSwitch1.MouseState = MaterialSkin.MouseState.HOVER;
@@ -254,7 +255,7 @@
             this.materialButton5.Depth = 0;
             this.materialButton5.HighEmphasis = true;
             this.materialButton5.Icon = null;
-            this.materialButton5.Location = new System.Drawing.Point(295, 571);
+            this.materialButton5.Location = new System.Drawing.Point(289, 571);
             this.materialButton5.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton5.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton5.Name = "materialButton5";
@@ -273,21 +274,42 @@
             this.panel4.Controls.Add(this.materialSwitch1);
             this.panel4.Controls.Add(this.materialButton6);
             this.panel4.Controls.Add(this.checkedListBox2);
-            this.panel4.Location = new System.Drawing.Point(798, 67);
+            this.panel4.Location = new System.Drawing.Point(808, 67);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(477, 642);
+            this.panel4.Size = new System.Drawing.Size(467, 642);
             this.panel4.TabIndex = 35;
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.convertBttn);
             this.panel2.Controls.Add(this.materialButton3);
             this.panel2.Controls.Add(this.materialMultiLineTextBox21);
             this.panel2.Controls.Add(this.materialButton2);
             this.panel2.Controls.Add(this.materialButton4);
-            this.panel2.Location = new System.Drawing.Point(554, 67);
+            this.panel2.Location = new System.Drawing.Point(550, 67);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(248, 642);
+            this.panel2.Size = new System.Drawing.Size(265, 642);
             this.panel2.TabIndex = 36;
+            // 
+            // convertBttn
+            // 
+            this.convertBttn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.convertBttn.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.convertBttn.Depth = 0;
+            this.convertBttn.HighEmphasis = true;
+            this.convertBttn.Icon = null;
+            this.convertBttn.Location = new System.Drawing.Point(5, 105);
+            this.convertBttn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.convertBttn.MouseState = MaterialSkin.MouseState.HOVER;
+            this.convertBttn.Name = "convertBttn";
+            this.convertBttn.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.convertBttn.Size = new System.Drawing.Size(109, 36);
+            this.convertBttn.TabIndex = 35;
+            this.convertBttn.Text = "Konwertuj";
+            this.convertBttn.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.convertBttn.UseAccentColor = false;
+            this.convertBttn.UseVisualStyleBackColor = true;
+            this.convertBttn.Click += new System.EventHandler(this.convertBttn_Click);
             // 
             // Sorter
             // 
@@ -327,5 +349,6 @@
         private MaterialSkin.Controls.MaterialButton materialButton5;
         private Panel panel4;
         private Panel panel2;
+        private MaterialSkin.Controls.MaterialButton convertBttn;
     }
 }

@@ -83,7 +83,7 @@ namespace Faza1Sorter_v2
             {
                 MessageBox.Show("Wprowadź nazwę pliku");
             }
-            if(textBox1.Text == String.Empty)
+            if (textBox1.Text == String.Empty)
             {
                 MessageBox.Show("Załaduj pliki");
             }
@@ -120,7 +120,7 @@ namespace Faza1Sorter_v2
             {
                 MessageBox.Show("Nie wybrano plików");
             }
-            else 
+            else
             {
                 //get checked files from checkedlistbox1 in textbox1 folder
                 string location = textBox1.Text;
@@ -418,9 +418,84 @@ namespace Faza1Sorter_v2
                     con.Close();
                 }
                 //if all files are moved, show messagebox
+                //if all files are moved, show messagebox
                 MessageBox.Show("Wszystkie pliki zostały przeniesione");
                 //clear every checkedlistbox1 items
                 checkedListBox1.Items.Clear();
+            }
+        }
+
+        private void convertBttn_Click(object sender, EventArgs e)
+        {
+            //This button will search for all numerical sequences of 10 digits in the materialMultiLineTextBox21 .It will delete other characters or words and save found numerical sequences from the new line in materialmultilinetextbox21.
+            //If there are no sequences, it will show messagebox.
+
+
+            //if materialmultilinetextbox21 is empty, show messagebox
+            if (materialMultiLineTextBox21.Text == "")
+            {
+                MessageBox.Show("Pusty tekst");
+            }
+            else
+            {
+                //create list of strings
+                List<string> list = new List<string>();
+                //create string array
+                string[] lines = materialMultiLineTextBox21.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+                //for each line in lines array
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    //create string variable
+                    string line = lines[i];
+                    //if line is not empty
+                    if (line != "")
+                    {
+                        //create string array
+                        string[] words = line.Split(' ');
+                        //for each word in words array
+                        for (int j = 0; j < words.Length; j++)
+                        {
+                            //create string variable
+                            string word = words[j];
+                            //if word is not empty
+                            if (word != "")
+                            {
+                                //if word is a sequence of 10 digits
+                                if (word.Length == 10 && word.All(char.IsDigit))
+                                {
+                                    //add word to list
+                                    list.Add(word);
+                                }
+                            }
+                        }
+                    }
+                }
+                //if list is empty, show messagebox
+                if (list.Count == 0)
+                {
+                    MessageBox.Show("Nie znaleziono numerów");
+                }
+                else
+                {
+                    //for each item in list
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        //delete all characters from list item
+                        list[i] = list[i].Replace(" ", "");
+                    }
+                    //create string variable
+                    string line = "";
+                    //for each item in list
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        //add item to string variable
+                        line += list[i] + "\r\n";
+                    }
+                    //clear material
+                    materialMultiLineTextBox21.Text = "";
+                    //add string variable to material
+                    materialMultiLineTextBox21.Text = line;
+                }
             }
         }
     }
