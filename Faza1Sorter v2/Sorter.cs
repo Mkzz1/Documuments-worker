@@ -175,8 +175,6 @@ namespace Faza1Sorter_v2
                 cmd = new SQLiteCommand(query, con);
                 cmd.ExecuteNonQuery();
                 con.Close();
-
-
                 MessageBox.Show("Pliki zostały przeniesione");
             }
         }
@@ -343,6 +341,7 @@ namespace Faza1Sorter_v2
                             string source = files1[j];
                             string destination = folderLocations[i % folderLocations.Count];
                             //Create a txt file in C: \ SORTER for each of the folders on the list, write down the first 10 characters of the transferred file name in this file.Remove duplicates
+
                             if (!File.Exists(destination + "\\" + list[i] + ".txt"))
                             {
                                 File.WriteAllText(destination + "\\" + list[i] + ".txt", list[i]);
@@ -356,8 +355,8 @@ namespace Faza1Sorter_v2
                         }
                     }
                 }
-                //Count how many files with the .txt extension are in each of the folders with folderLocations. Assign a number of files to the NumOfWork of each folder.
-                for (int i = 0; i < folderLocations.Count; i++)
+                    //Count how many files with the .txt extension are in each of the folders with folderLocations. Assign a number of files to the NumOfWork of each folder.
+                    for (int i = 0; i < folderLocations.Count; i++)
                 {
                     string[] files2 = Directory.GetFiles(folderLocations[i]);
                     int numOfWork = 0;
@@ -418,19 +417,16 @@ namespace Faza1Sorter_v2
                     con.Close();
                 }
                 //if all files are moved, show messagebox
-                //if all files are moved, show messagebox
                 MessageBox.Show("Wszystkie pliki zostały przeniesione");
                 //clear every checkedlistbox1 items
                 checkedListBox1.Items.Clear();
             }
         }
-
+        
         private void convertBttn_Click(object sender, EventArgs e)
         {
             //This button will search for all numerical sequences of 10 digits in the materialMultiLineTextBox21 .It will delete other characters or words and save found numerical sequences from the new line in materialmultilinetextbox21.
             //If there are no sequences, it will show messagebox.
-
-
             //if materialmultilinetextbox21 is empty, show messagebox
             if (materialMultiLineTextBox21.Text == "")
             {
@@ -465,11 +461,13 @@ namespace Faza1Sorter_v2
                                 {
                                     //add word to list
                                     list.Add(word);
+                                    //remove duplicates
                                 }
                             }
                         }
                     }
                 }
+                list = list.Distinct().ToList();
                 //if list is empty, show messagebox
                 if (list.Count == 0)
                 {
@@ -495,6 +493,7 @@ namespace Faza1Sorter_v2
                     materialMultiLineTextBox21.Text = "";
                     //add string variable to material
                     materialMultiLineTextBox21.Text = line;
+                    //remove duplicates from list
                 }
             }
         }

@@ -77,7 +77,7 @@
             this.materialButton2.Depth = 0;
             this.materialButton2.HighEmphasis = true;
             this.materialButton2.Icon = null;
-            this.materialButton2.Location = new System.Drawing.Point(142, 105);
+            this.materialButton2.Location = new System.Drawing.Point(4, 105);
             this.materialButton2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton2.Name = "materialButton2";
@@ -232,7 +232,9 @@
             // 
             // materialSwitch1
             // 
-            this.materialSwitch1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.materialSwitch1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.materialSwitch1.AutoSize = true;
             this.materialSwitch1.Depth = 0;
             this.materialSwitch1.Location = new System.Drawing.Point(332, 2);
@@ -298,7 +300,7 @@
             this.convertBttn.Depth = 0;
             this.convertBttn.HighEmphasis = true;
             this.convertBttn.Icon = null;
-            this.convertBttn.Location = new System.Drawing.Point(5, 105);
+            this.convertBttn.Location = new System.Drawing.Point(146, 105);
             this.convertBttn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.convertBttn.MouseState = MaterialSkin.MouseState.HOVER;
             this.convertBttn.Name = "convertBttn";
