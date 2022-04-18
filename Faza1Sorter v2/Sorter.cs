@@ -340,83 +340,66 @@ namespace Faza1Sorter_v2
                             //move file to folder
                             string source = files1[j];
                             string destination = folderLocations[i % folderLocations.Count];
-                            //Create a txt file in C: \ SORTER for each of the folders on the list, write down the first 10 characters of the transferred file name in this file.Remove duplicates
-
-                            if (!File.Exists(destination + "\\" + list[i] + ".txt"))
-                            {
-                                File.WriteAllText(destination + "\\" + list[i] + ".txt", list[i]);
-                            }
-                            else
-                            {
-                                File.AppendAllText(destination + "\\" + list[i] + ".txt", list[i]);
-                            }
-                            //move file to folder
                             File.Move(source, destination + "\\" + Path.GetFileName(source));
                         }
                     }
                 }
-                    //Count how many files with the .txt extension are in each of the folders with folderLocations. Assign a number of files to the NumOfWork of each folder.
-                    for (int i = 0; i < folderLocations.Count; i++)
-                {
-                    string[] files2 = Directory.GetFiles(folderLocations[i]);
-                    int numOfWork = 0;
-                    for (int j = 0; j < files2.Length; j++)
-                    {
-                        if (Path.GetExtension(files2[j]) == ".txt")
-                        {
-                            numOfWork++;
-                        }
-                    }
-                    //update database
-                    con = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
-                    con.Open();
-                    string query = "UPDATE Workers SET NumOfWork = NumOfWork +" + numOfWork + " WHERE FolderLocation = '" + folderLocations[i] + "'";
-                    SQLiteCommand cmd = new SQLiteCommand(query, con);
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-                //delete all files with .txt extension from folders
+                //NumOfWork says how much every worker has cases to do. One Case is all files that starts with the same 10 charachters in name. LimitOfWork is how many cases worker can do.
+                //If any folder has more cases than LimitOfWork, move cases between other folders untill all folders have less than LimitOfWork cases.
                 for (int i = 0; i < folderLocations.Count; i++)
                 {
                     string[] files2 = Directory.GetFiles(folderLocations[i]);
+                    List<string> list2 = new List<string>();
                     for (int j = 0; j < files2.Length; j++)
                     {
-                        if (Path.GetExtension(files2[j]) == ".txt")
-                        {
-                            File.Delete(files2[j]);
-                        }
+                        string fileName = Path.GetFileName(files2[j]);
+                        list2.Add(fileName.Substring(0, 10));
                     }
-                }
-                //if NumOfWork is bigger than LimitOfWork number from database, show messagebox
-                for (int i = 0; i < folderLocations.Count; i++)
-                {
-                    con = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
-                    con.Open();
-                    string query = "SELECT NumOfWork FROM Workers WHERE FolderLocation = '" + folderLocations[i] + "'";
-                    SQLiteCommand cmd = new SQLiteCommand(query, con);
+                    list2 = list2.Distinct().ToList();
+                    SQLiteConnection con1 = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
+                    con1.Open();
+                    string query = "SELECT LimitOfWork FROM Workers WHERE Name = '" + checkedNames[i] + "'";
+                    SQLiteCommand cmd = new SQLiteCommand(query, con1);
                     SQLiteDataReader reader = cmd.ExecuteReader();
-                    //save NumOfWork to int variable
-                    int numOfWork = 0;
                     while (reader.Read())
                     {
-                        numOfWork = Convert.ToInt32(reader["NumOfWork"]);
+                        if (list2.Count > Convert.ToInt32(reader["LimitOfWork"]))
+                        {
+                            while (list2.Count > Convert.ToInt32(reader["LimitOfWork"]))
+                            {
+                                for (int j = 0; j < files2.Length; j++)
+                                {
+                                    if (Path.GetFileName(files2[j]).Substring(0, 10) == list2[0])
+                                    {
+                                        string source = files2[j];
+                                        string destination = folderLocations[(i + 1) % folderLocations.Count];
+                                        File.Move(source, destination + "\\" + Path.GetFileName(source));
+                                    }
+                                }
+                                list2.RemoveAt(0);
+                            }
+                        }
                     }
-                    string query1 = "SELECT LimitOfWork FROM Workers WHERE FolderLocation = '" + folderLocations[i] + "'";
-                    SQLiteCommand cmd1 = new SQLiteCommand(query1, con);
-                    SQLiteDataReader reader1 = cmd1.ExecuteReader();
-                    //save LimitOfWork to int variable
-                    int limitOfWork = 0;
-                    while (reader1.Read())
-                    {
-                        limitOfWork = Convert.ToInt32(reader1["LimitOfWork"]);
-                    }
-                    if (numOfWork > limitOfWork)
-                    {
-                        MessageBox.Show("Przekroczono limit pracy w folderze " + folderLocations[i] + "\nPamiętaj o RĘCZNYM przeniesieniu plików do innych folderów!");
-                    }
-                    con.Close();
+                    con1.Close();
                 }
-                //if all files are moved, show messagebox
+                //count how many cases are in each folder. One case is all files that starts with the same name. Update database with new number of cases.
+                for (int i = 0; i < folderLocations.Count; i++)
+                {
+                    string[] files2 = Directory.GetFiles(folderLocations[i]);
+                    List<string> list2 = new List<string>();
+                    for (int j = 0; j < files2.Length; j++)
+                    {
+                        string fileName = Path.GetFileName(files2[j]);
+                        list2.Add(fileName.Substring(0, 10));
+                    }
+                    list2 = list2.Distinct().ToList();
+                    SQLiteConnection con1 = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
+                    con1.Open();
+                    string query = "UPDATE Workers SET NumOfWork = NumOfWork +" + list2.Count + " WHERE Name = '" + checkedNames[i] + "'";
+                    SQLiteCommand cmd = new SQLiteCommand(query, con1);
+                    cmd.ExecuteNonQuery();
+                    con1.Close();
+                }
                 MessageBox.Show("Wszystkie pliki zostały przeniesione");
                 //clear every checkedlistbox1 items
                 checkedListBox1.Items.Clear();

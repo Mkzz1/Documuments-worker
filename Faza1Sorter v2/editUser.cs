@@ -46,6 +46,11 @@ namespace Faza1Sorter_v2
             sda.Fill(dt);
             dataGridView1.DataSource = dt;
             con.Close();
+            //change name of columns in datagridview 
+            dataGridView1.Columns[0].HeaderText = "Imię";
+            dataGridView1.Columns[1].HeaderText = "Folder";
+            dataGridView1.Columns[2].HeaderText = "Limit";
+            dataGridView1.Columns[3].HeaderText = "Ilość spraw";
         }
 
         private void materialButton1_Click(object sender, EventArgs e)
