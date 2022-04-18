@@ -8,6 +8,7 @@ namespace Faza1Sorter_v2
     {
         string[] files;
         string line = "C:\\SORTER\\database.mdf";
+
         public Sorter()
         {
             InitializeComponent();
@@ -323,6 +324,26 @@ namespace Faza1Sorter_v2
                     {
                         folderLocations.Add(reader["FolderLocation"].ToString());
                     }
+                    //if folderLocation NumOfWork is equal or bigger to LimitOfWork from database, remove from list
+                    for (int v = 0; v < folderLocations.Count; v++)
+                    {
+                        string query1 = "SELECT NumOfWork, LimitOfWork FROM Workers WHERE FolderLocation = '" + folderLocations[v] + "'";
+                        SQLiteCommand cmd1 = new SQLiteCommand(query1, con);
+                        SQLiteDataReader reader1 = cmd1.ExecuteReader();
+                        while (reader1.Read())
+                        {
+                            if (Convert.ToInt32(reader1["NumOfWork"]) == Convert.ToInt32(reader1["LimitOfWork"]) || Convert.ToInt32(reader1["NumOfWork"]) > Convert.ToInt32(reader1["LimitOfWork"]))
+                            {
+                                folderLocations.Remove(folderLocations[v]);
+                            }
+                        }
+                    }
+                    //if list is empty, show messagebox
+                    if (folderLocations.Count == 0)
+                    {
+                        MessageBox.Show("Foldery osięgnęły swój limit");
+                        break;
+                    }
                 }
                 con.Close();
                 //check if file1 contain fileName from list. If yes, move all files that contain first item to list to first folder, second item to second folder and so on. If folderLocations list comes to an end, start from begining until list ist empty.
@@ -433,7 +454,7 @@ namespace Faza1Sorter_v2
                     list2 = list2.Distinct().ToList();
                     SQLiteConnection con1 = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
                     con1.Open();
-                    string query = "UPDATE Workers SET NumOfWork = NumOfWork +" + list2.Count + " WHERE Name = '" + checkedNames[i] + "'";
+                    string query = "UPDATE Workers SET NumOfWork = NumOfWork + " + list2.Count + " WHERE Name = '" + checkedNames[i] + "'";
                     SQLiteCommand cmd = new SQLiteCommand(query, con1);
                     cmd.ExecuteNonQuery();
                     con1.Close();

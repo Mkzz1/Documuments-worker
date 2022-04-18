@@ -81,5 +81,15 @@ namespace Faza1Sorter_v2
             con.Close();
             MessageBox.Show("Wyzerowano przydział");
         }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //if user click on a cell Name in datagridview, textboxes will load data from selected row
+            textBox3.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+            textBox2.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+            numericUpDown1.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+            numericUpDown2.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+            
+        }
     }
 }
