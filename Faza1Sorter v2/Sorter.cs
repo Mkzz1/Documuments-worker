@@ -156,11 +156,7 @@ namespace Faza1Sorter_v2
                     string newFileName = Path.Combine(folderLocation, fileName);
                     File.Move(location + "\\" + files[i], newFileName);
                 }
-                //Remove moved files from checkedlistbox1
-                for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
-                {
-                    checkedListBox1.Items.Remove(checkedListBox1.CheckedItems[i]);
-                }
+                
                 //count how many files in folder has the same first ten charachters in their name. save number of files as int
                 List<string> list = new List<string>();
                 foreach (string file in Directory.GetFiles(folderLocation))
@@ -177,6 +173,11 @@ namespace Faza1Sorter_v2
                 cmd.ExecuteNonQuery();
                 con.Close();
                 MessageBox.Show("Pliki zostały przeniesione");
+                //Remove moved files from checkedlistbox1
+                for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
+                {
+                    checkedListBox1.Items.Remove(checkedListBox1.CheckedItems[i]);
+                }
             }
         }
 
@@ -332,17 +333,11 @@ namespace Faza1Sorter_v2
                         SQLiteDataReader reader1 = cmd1.ExecuteReader();
                         while (reader1.Read())
                         {
-                            if (Convert.ToInt32(reader1["NumOfWork"]) == Convert.ToInt32(reader1["LimitOfWork"]) || Convert.ToInt32(reader1["NumOfWork"]) > Convert.ToInt32(reader1["LimitOfWork"]))
+                            if (Convert.ToInt32(reader1["NumOfWork"]) >= Convert.ToInt32(reader1["LimitOfWork"]))
                             {
                                 folderLocations.Remove(folderLocations[v]);
                             }
                         }
-                    }
-                    //if list is empty, show messagebox
-                    if (folderLocations.Count == 0)
-                    {
-                        MessageBox.Show("Foldery osięgnęły swój limit");
-                        break;
                     }
                 }
                 con.Close();
@@ -440,31 +435,40 @@ namespace Faza1Sorter_v2
                     }
                     con1.Close();
                 }
-                
+
                 //count how many cases are in each folder. One case is all files that starts with the same name. Update database with new number of cases.
                 for (int i = 0; i < folderLocations.Count; i++)
                 {
-                    string[] files2 = Directory.GetFiles(folderLocations[i]);
-                    List<string> list2 = new List<string>();
-                    for (int j = 0; j < files2.Length; j++)
+                    //if folder is empty, remove from list
+                    if (Directory.GetFiles(folderLocations[i]).Length == 0)
                     {
-                        string fileName = Path.GetFileName(files2[j]);
-                        list2.Add(fileName.Substring(0, 10));
+                        folderLocations.Remove(folderLocations[i]);
                     }
-                    list2 = list2.Distinct().ToList();
-                    SQLiteConnection con1 = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
-                    con1.Open();
-                    string query = "UPDATE Workers SET NumOfWork = NumOfWork + " + list2.Count + " WHERE Name = '" + checkedNames[i] + "'";
-                    SQLiteCommand cmd = new SQLiteCommand(query, con1);
-                    cmd.ExecuteNonQuery();
-                    con1.Close();
+                    else
+                    {
+                        string[] files2 = Directory.GetFiles(folderLocations[i]);
+                        List<string> list2 = new List<string>();
+                        for (int j = 0; j < files2.Length; j++)
+                        {
+                            string fileName = Path.GetFileName(files2[j]);
+                            list2.Add(fileName.Substring(0, 10));
+                        }
+                        list2 = list2.Distinct().ToList();
+                        SQLiteConnection con1 = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
+                        con1.Open();
+                        string query = "UPDATE Workers SET NumOfWork = NumOfWork +" + list2.Count + " WHERE FolderLocation = '" + folderLocations[i] + "'";
+                        SQLiteCommand cmd = new SQLiteCommand(query, con1);
+                        cmd.ExecuteNonQuery();
+                        con1.Close();
+                    }
                 }
+                
                 MessageBox.Show("Wszystkie pliki zostały przeniesione");
                 //clear every checkedlistbox1 items
                 checkedListBox1.Items.Clear();
             }
         }
-        
+
         private void convertBttn_Click(object sender, EventArgs e)
         {
             //This button will search for all numerical sequences of 10 digits in the materialMultiLineTextBox21 .It will delete other characters or words and save found numerical sequences from the new line in materialmultilinetextbox21.
