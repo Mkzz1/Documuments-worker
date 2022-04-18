@@ -382,6 +382,44 @@ namespace Faza1Sorter_v2
                     }
                     con1.Close();
                 }
+                //if any folder has more cases than LimitOfWork, take the excess cases and move it back to the folder with textbox1
+                for (int i = 0; i < folderLocations.Count; i++)
+                {
+                    string[] files2 = Directory.GetFiles(folderLocations[i]);
+                    List<string> list2 = new List<string>();
+                    for (int j = 0; j < files2.Length; j++)
+                    {
+                        string fileName = Path.GetFileName(files2[j]);
+                        list2.Add(fileName.Substring(0, 10));
+                    }
+                    list2 = list2.Distinct().ToList();
+                    SQLiteConnection con1 = new SQLiteConnection(@"Data Source=" + line + ";Integrated Security=True");
+                    con1.Open();
+                    string query = "SELECT LimitOfWork FROM Workers WHERE Name = '" + checkedNames[i] + "'";
+                    SQLiteCommand cmd = new SQLiteCommand(query, con1);
+                    SQLiteDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (list2.Count > Convert.ToInt32(reader["LimitOfWork"]))
+                        {
+                            while (list2.Count > Convert.ToInt32(reader["LimitOfWork"]))
+                            {
+                                for (int j = 0; j < files2.Length; j++)
+                                {
+                                    if (Path.GetFileName(files2[j]).Substring(0, 10) == list2[0])
+                                    {
+                                        string source = files2[j];
+                                        string destination = textBox1.Text;
+                                        File.Move(source, destination + "\\" + Path.GetFileName(source));
+                                    }
+                                }
+                                list2.RemoveAt(0);
+                            }
+                        }
+                    }
+                    con1.Close();
+                }
+                
                 //count how many cases are in each folder. One case is all files that starts with the same name. Update database with new number of cases.
                 for (int i = 0; i < folderLocations.Count; i++)
                 {
