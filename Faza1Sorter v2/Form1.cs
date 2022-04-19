@@ -1,6 +1,5 @@
 using MaterialSkin;
 using MaterialSkin.Controls;
-using System.Timers;
 
 namespace Faza1Sorter_v2
 {

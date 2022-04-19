@@ -48,6 +48,14 @@ namespace Faza1Sorter_v2
             }
             //function will add path to the textbox
             textBox1.Text = folderBrowserDialog1.SelectedPath;
+            //remove thumbs.db from checkedlistbox
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                if (checkedListBox1.Items[i].ToString() == "Thumbs.db")
+                {
+                    checkedListBox1.Items.RemoveAt(i);
+                }
+            }
         }
 
         private void materialCheckbox1_CheckedChanged(object sender, EventArgs e)
@@ -469,7 +477,7 @@ namespace Faza1Sorter_v2
                 //load all files from textbox1 folder into checkedlistbox1. If folder is empty, show messagebox.
                 if (Directory.GetFiles(textBox1.Text).Length == 0)
                 {
-                    MessageBox.Show("Folder jest pusty");
+                    MessageBox.Show("Folder z plikami jest pusty");
                 }
                 else
                 {
@@ -485,6 +493,14 @@ namespace Faza1Sorter_v2
                     for (int i = 0; i < list1.Count; i++)
                     {
                         checkedListBox1.Items.Add(list1[i]);
+                    }
+                }
+                //remove thumbs.db from checkedlistbox
+                for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                {
+                    if (checkedListBox1.Items[i].ToString() == "Thumbs.db")
+                    {
+                        checkedListBox1.Items.RemoveAt(i);
                     }
                 }
             }

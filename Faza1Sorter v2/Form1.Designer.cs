@@ -108,7 +108,7 @@
             // button5
             // 
             this.button5.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button5.Location = new System.Drawing.Point(301, 9);
+            this.button5.Location = new System.Drawing.Point(193, 9);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(169, 40);
             this.button5.TabIndex = 7;
@@ -119,7 +119,7 @@
             // button6
             // 
             this.button6.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button6.Location = new System.Drawing.Point(542, 9);
+            this.button6.Location = new System.Drawing.Point(627, 9);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(165, 40);
             this.button6.TabIndex = 8;
